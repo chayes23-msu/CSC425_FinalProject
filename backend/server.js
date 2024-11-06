@@ -1,4 +1,4 @@
-import { getQuery, runQuery, eachQuery } from "./database/model/dbUtils.js";
+import { getQuery, runQuery, eachQuery } from "./database/dbUtils.js";
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import express from 'express';

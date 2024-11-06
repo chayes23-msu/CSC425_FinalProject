@@ -1,4 +1,4 @@
-import db from '../db.js';
+import db from './db.js';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -36,5 +36,5 @@ export function eachQuery(queryFileName, params) {
 }
 
 function getStatementFromSQLFile(fileName) {
-    return db.prepare(readFileSync(join("backend", "database", "model", fileName + ".sql"), 'utf8'));
+    return db.prepare(readFileSync(join("backend", "database", fileName + ".sql"), 'utf8'));
 }
