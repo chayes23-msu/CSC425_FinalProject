@@ -1,2 +1,2 @@
 DELETE FROM USERS
-WHERE userID = ?;
+WHERE userID = $userID;

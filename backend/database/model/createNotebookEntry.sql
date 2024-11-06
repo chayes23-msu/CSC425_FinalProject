@@ -1,2 +1,2 @@
 INSERT INTO NotebookEntries (animalID, content, userID)
-VALUES (?, ?, ?);
+VALUES ($animalID, $content, $userID);

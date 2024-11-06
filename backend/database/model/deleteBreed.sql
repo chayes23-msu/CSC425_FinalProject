@@ -1,0 +1,1 @@
+DELETE FROM Breeds WHERE breedID = $breedID;

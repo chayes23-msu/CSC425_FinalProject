@@ -1,2 +1,2 @@
 DELETE FROM Animals
-WHERE animalID = ?;
+WHERE animalID = $animalID;

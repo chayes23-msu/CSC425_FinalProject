@@ -1,1 +1,1 @@
-INSERT INTO Animals (name, type, birthDate, breedComposition, age, fatherID, motherID, colorID) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Animals (name, type, birthDate, breedComposition, age, fatherID, motherID, colorID) VALUES ($name, $type, $birthDate, $breedComposition, $age, $fatherID, $motherID, $colorID);

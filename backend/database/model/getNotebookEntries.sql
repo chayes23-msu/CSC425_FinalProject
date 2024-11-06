@@ -1,1 +1,1 @@
-SELECT * FROM NotebookEntries;
+SELECT * FROM NotebookEntries WHERE animalID = $animalID;
