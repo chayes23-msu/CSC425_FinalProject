@@ -16,7 +16,7 @@ try {
 
     db = new Database(dbPath);
 
-    const schemaPath = join("backend", "database", "schema.sql");
+    const schemaPath = join("database", "schema.sql");
     const schema = readFileSync(schemaPath, 'utf8');
     db.exec(schema);
 
