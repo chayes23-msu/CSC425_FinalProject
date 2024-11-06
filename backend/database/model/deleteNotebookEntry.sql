@@ -1,2 +1,2 @@
 DELETE FROM notebook_entries
-WHERE entryID = ?;
+WHERE entryID = $entryID;
