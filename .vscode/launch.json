@@ -19,11 +19,23 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch DB",
+            "name": "Run dB",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\backend\\database\\db.js",
+            "env": {
+                "DB_PATH": "${workspaceFolder}\\backend\\database\\database-files\\test.sqlite"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Seeder",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\backend\\seedDb.js",
             "env": {
                 "DB_PATH": "${workspaceFolder}\\backend\\database\\database-files\\test.sqlite"
             }

@@ -12,7 +12,7 @@ import { join } from 'path';
  * @returns Object representing the one row result
  */
 export function getQuery(queryFileName, params) {
-    return getStatementFromSQLFile(queryFileName).get(...params);
+    return getStatementFromSQLFile(queryFileName).get(params);
 }
 
 /**
@@ -22,7 +22,7 @@ export function getQuery(queryFileName, params) {
  * @returns An object summarizing changes made by the query
  */
 export function runQuery(queryFileName, params) {
-    return getStatementFromSQLFile(queryFileName).run(...params);
+    return getStatementFromSQLFile(queryFileName).run(params);
 }
 
 /**
@@ -32,9 +32,9 @@ export function runQuery(queryFileName, params) {
  * @returns Object representing each row returned by the query
  */
 export function eachQuery(queryFileName, params) {
-    return getStatementFromSQLFile(queryFileName).each(...params);
+    return getStatementFromSQLFile(queryFileName).each(params);
 }
 
 function getStatementFromSQLFile(fileName) {
-    return db.prepare(readFileSync(join("backend", "database", fileName + ".sql"), 'utf8'));
+    return db.prepare(readFileSync(join("backend", "database", "model", fileName + ".sql"), 'utf8'));
 }
