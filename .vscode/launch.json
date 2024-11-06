@@ -7,7 +7,19 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Server",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\backend\\server.js",
+            "env": {
+                "DB_PATH": "${workspaceFolder}\\backend\\database\\database-files\\test.sqlite"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch DB",
             "skipFiles": [
                 "<node_internals>/**"
             ],

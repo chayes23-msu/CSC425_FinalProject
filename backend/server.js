@@ -9,4 +9,8 @@ import { getQuery, runQuery, eachQuery } from "./database/model/dbUtils.js";
 //   console.log(`Server is running on port ${port}`);
 // });
 
-runQuery("createUser", ["sherlock", "holmes"]);
+try {
+    runQuery("createUser", ["idiot", "holmes"]);
+} catch (error) {
+    console.error("Error creating user:", error);
+}

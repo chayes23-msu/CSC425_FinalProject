@@ -15,5 +15,5 @@ export function eachQuery(queryFileName, params) {
 }
 
 function getStatementFromSQLFile(fileName) {
-    return db.prepare(readFileSync(join("database", "model", fileName + ".sql"), 'utf8'));
+    return db.prepare(readFileSync(join("backend", "database", "model", fileName + ".sql"), 'utf8'));
 }
