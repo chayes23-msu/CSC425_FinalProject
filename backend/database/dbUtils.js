@@ -31,8 +31,8 @@ export function runQuery(queryFileName, params) {
  * @param {*} params This is an array of the parameters you want to pass to the query
  * @returns Object representing each row returned by the query
  */
-export function eachQuery(queryFileName, params) {
-    return getStatementFromSQLFile(queryFileName).each(params);
+export function allQuery(queryFileName, params) {
+    return getStatementFromSQLFile(queryFileName).all(params);
 }
 
 function getStatementFromSQLFile(fileName) {

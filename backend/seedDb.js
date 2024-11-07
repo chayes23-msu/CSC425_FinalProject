@@ -1,3 +1,10 @@
-import { runQuery, getQuery, eachQuery } from "./database/dbUtils.js";
+import { runQuery, getQuery, allQuery } from "./database/dbUtils.js";
 
-runQuery("createColor", {color: "red"});
+function addColors() {
+    let colors = ["red", "blue", "green", "yellow", "purple", "orange", "black", "white"];
+    colors.forEach(color => {
+        runQuery("createColor", {color: color});
+    });
+}
+addColors();
+
