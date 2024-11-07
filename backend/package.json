@@ -10,6 +10,7 @@
   "author": "Isaac Reynolds and Matthew Hayes",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "better-sqlite3": "^11.5.0",
     "express": "^4.21.1",
     "https": "^1.0.0",

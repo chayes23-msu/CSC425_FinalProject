@@ -31,7 +31,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\backend\\seedDb.js",
+            "program": "${workspaceFolder}\\backend\\database\\seedDb.js",
             "envFile": "${workspaceFolder}\\backend\\.env",
         }
     ]

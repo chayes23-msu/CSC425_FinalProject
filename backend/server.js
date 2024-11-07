@@ -1,5 +1,6 @@
 import { getQuery, runQuery, allQuery } from "./database/dbUtils.js";
 import { readFileSync } from 'fs';
+import { hashPassword, verifyPassword } from "./hasher.js";
 import express from 'express';
 import https from 'https';
 import morgan from 'morgan';
@@ -162,7 +163,8 @@ app.post('/users', async (req, res) => {
     }
   
     try {
-        await runQuery("createUser", {username: username, password: password});
+        const hashedPassword = await hashPassword(password);
+        await runQuery("createUser", {username: username, password: hashedPassword});
         res.status(201).send("User created");
     } catch (error) {
         console.error("Error creating user:", error);
