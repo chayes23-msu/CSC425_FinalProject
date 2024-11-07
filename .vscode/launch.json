@@ -12,9 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\backend\\server.js",
-            "env": {
-                "DB_PATH": "${workspaceFolder}\\backend\\database\\database-files\\test.sqlite"
-            }
+            "envFile": "${workspaceFolder}\\backend\\.env",
         },
         {
             "type": "node",
@@ -24,9 +22,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\backend\\database\\db.js",
-            "env": {
-                "DB_PATH": "${workspaceFolder}\\backend\\database\\database-files\\test.sqlite"
-            }
+            "envFile": "${workspaceFolder}\\backend\\.env",
         },
         {
             "type": "node",
@@ -36,9 +32,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\backend\\seedDb.js",
-            "env": {
-                "DB_PATH": "${workspaceFolder}\\backend\\database\\database-files\\test.sqlite"
-            }
+            "envFile": "${workspaceFolder}\\backend\\.env",
         }
     ]
 }

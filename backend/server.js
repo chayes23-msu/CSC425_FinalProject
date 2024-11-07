@@ -65,9 +65,6 @@ app.post('/user', async (req, res) => {
     }
 });
 
-//Port
-const port = 5000;
-
 // Read SSL certificate and key files
 const options = {
     key: readFileSync(join("backend", "localhost-key.pem")),
@@ -77,8 +74,8 @@ const options = {
 // Create https server
 const server = https.createServer(options, app);
 
-server.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+server.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
 });
 
 
