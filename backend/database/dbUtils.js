@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 // ********** Database Utility Functions **********
-// Documentation for the core functions found at https://github.com/TryGhost/node-sqlite3/wiki/API
+// Documentation for the core functions found at 
 
 /**
  * 
