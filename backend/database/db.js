@@ -19,6 +19,7 @@ try {
     const schemaPath = join("backend", "database", "schema.sql");
     const schema = readFileSync(schemaPath, 'utf8');
     db.exec(schema);
+    db.prepare("PRAGMA foreign_keys = ON;").run();
 
 } catch (error) {
     console.error("Error initializing database:", error);

@@ -21,8 +21,10 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 //#region Routes
+
+// Default route
 app.get('/', (req, res) => {
-    res.send("Hello World");
+    res.send("Connected to the server.");
 });
 
 // Get all colors
@@ -36,6 +38,8 @@ app.get('/colors', async (req, res) => {
     }
 });
 
+
+// Create a color
 app.post('/colors', async (req, res) => {
     const { color } = req.body;
     
@@ -53,6 +57,7 @@ app.post('/colors', async (req, res) => {
     }
 });
 
+// Delete a color
 app.delete('/colors/:colorID', async (req, res) => {
     try {
         await runQuery("deleteColor", {colorID: req.params.colorID});
@@ -63,6 +68,7 @@ app.delete('/colors/:colorID', async (req, res) => {
     }
 });
 
+// Update a color
 app.put('/colors/:colorID', async (req, res) => {
     const { color } = req.body;
     
@@ -109,6 +115,7 @@ app.post('/breeds', async (req, res) => {
     }
 });
 
+// Delete a breed
 app.delete('/breeds/:breedID', async (req, res) => {
     try {
         await runQuery("deleteBreed", {breedID: req.params.breedID});
@@ -119,6 +126,7 @@ app.delete('/breeds/:breedID', async (req, res) => {
     }
 });
 
+// Update a breed
 app.put('/breeds/:breedID', async (req, res) => {
     const { breed } = req.body;
     
@@ -135,6 +143,25 @@ app.put('/breeds/:breedID', async (req, res) => {
         res.status(500).send("Error updating breed");
     }
 });
+
+// Create an animal
+app.post('/animals', async (req, res) => {
+    const { name, type, birthDate, breedComposition, fatherID, motherID, colorID, currentWeight } = req.body;
+    
+    // Input validation
+    if (!name || !type || !birthDate || !breedComposition || !fatherID || !motherID || !colorID || !currentWeight) {
+      return res.status(400).send("All fields are required.");
+    }
+  
+    try {
+        await runQuery("createAnimal", {name: name, type: type, birthDate: birthDate, breedComposition: breedComposition, fatherID: fatherID, motherID: motherID, colorID: colorID, currentWeight: currentWeight});
+        res.status(201).send("Animal created");
+    } catch (error) {
+        console.error("Error creating animal:", error);
+        res.status(500).send("Error creating animal");
+    }
+});
+
 
 // Get user by username
 app.get('/users/:username', async (req, res) => {

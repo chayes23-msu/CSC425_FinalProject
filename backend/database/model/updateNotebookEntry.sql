@@ -1,7 +1,9 @@
 UPDATE NotebookEntries
 SET 
     content = $content
-WHERE 
-    animalID = $animalID AND
     userID = $userID
+    weight = $weight
+    modifiedDate = CURRENT_TIMESTAMP
+WHERE 
+    entryID = $entryID
 ;

@@ -12,7 +12,12 @@ import { join } from 'path';
  * @returns Object representing the one row result
  */
 export function getQuery(queryFileName, params) {
-    return getStatementFromSQLFile(queryFileName).get(params);
+    try {
+        return getStatementFromSQLFile(queryFileName).get(params);
+    } catch (error) {
+        console.error(`Error running get-query "${queryFileName}":`, error);
+        throw new Error(`Failed to run get-query "${queryFileName}": ${error.message}`);
+    }
 }
 
 /**
@@ -22,7 +27,12 @@ export function getQuery(queryFileName, params) {
  * @returns An object summarizing changes made by the query
  */
 export function runQuery(queryFileName, params) {
-    return getStatementFromSQLFile(queryFileName).run(params);
+    try {
+        return getStatementFromSQLFile(queryFileName).run(params);
+    } catch (error) { 
+        console.error(`Error running run-query "${queryFileName}":`, error);
+        throw new Error(`Failed to run run-query "${queryFileName}": ${error.message}`);
+    }
 }
 
 /**
@@ -32,9 +42,20 @@ export function runQuery(queryFileName, params) {
  * @returns Object representing each row returned by the query
  */
 export function allQuery(queryFileName, params) {
-    return getStatementFromSQLFile(queryFileName).all(params);
+    try {
+        return getStatementFromSQLFile(queryFileName).all(params);
+    } catch (error) {
+        console.error(`Error running all-query "${queryFileName}":`, error);
+        throw new Error(`Failed to run all-query "${queryFileName}": ${error.message}`);
+    }
 }
 
 function getStatementFromSQLFile(fileName) {
-    return db.prepare(readFileSync(join("backend", "database", "model", fileName + ".sql"), 'utf8'));
+    try {
+        const filePath = join("backend", "database", "model", `${fileName}.sql`);
+        return db.prepare(readFileSync(filePath, 'utf8'));
+    } catch (error) {
+        console.error(`Error reading SQL file "${fileName}":`, error);
+        throw new Error(`Failed to load SQL file "${fileName}": ${error.message}`);
+    }
 }

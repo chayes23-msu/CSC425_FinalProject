@@ -8,4 +8,32 @@ function addColors() {
         runQuery("createColor", {color: color});
     });
 }
-addColors();
+
+function addAnimals() {
+    let animals = [
+        {
+            colorID: 1,
+            motherID: null,
+            fatherID: null,
+            birthDate: "2021-01-01",
+            name: "Fluffy",
+            type: "cow",
+            currentWeight: 1123,
+            breedComposition: "Holstein"
+        },
+    ];
+    animals.forEach(animal => {
+        runQuery("createAnimal", animal);
+    });
+}
+
+runQuery("createAnimal", {
+    colorID: 1,
+    motherID: null,
+    fatherID: null,
+    birthDate: "2021-01-01",
+    name: "Fluffy",
+    type: "cow",
+    currentWeight: 1123,
+    breedComposition: "Holstein"
+});
