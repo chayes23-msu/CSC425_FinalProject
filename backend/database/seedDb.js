@@ -9,6 +9,8 @@ function addColors() {
     });
 }
 
+addColors();
+
 function addAnimals() {
     let animals = [
         {
@@ -26,14 +28,5 @@ function addAnimals() {
         runQuery("createAnimal", animal);
     });
 }
+addAnimals();
 
-runQuery("createAnimal", {
-    colorID: 1,
-    motherID: null,
-    fatherID: null,
-    birthDate: "2021-01-01",
-    name: "Fluffy",
-    type: "cow",
-    currentWeight: 1123,
-    breedComposition: "Holstein"
-});
