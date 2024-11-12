@@ -1,4 +1,4 @@
-UPDATE animals
+UPDATE Animals
 SET name = $name,
     type = $type,
     birthDate = $birthDate,

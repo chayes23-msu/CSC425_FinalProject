@@ -27,6 +27,7 @@ app.get('/', (req, res) => {
     res.send("Connected to the server.");
 });
 
+//#region Colors
 // Get all colors
 app.get('/colors', async (req, res) => {
     try {
@@ -85,7 +86,9 @@ app.put('/colors/:colorID', async (req, res) => {
         res.status(500).send("Error updating color");
     }
 });
+//#endregion
 
+//#region Breeds
 // Get all breeds
 app.get('/breeds', async (req, res) => {
     try {
@@ -143,8 +146,10 @@ app.put('/breeds/:breedID', async (req, res) => {
         res.status(500).send("Error updating breed");
     }
 });
+//#endregion
 
-// Create an animal
+//#region Animals
+// Create an animal ***NO POSTMAN TEST***
 app.post('/animals', async (req, res) => {
     const { name, type, birthDate, breedComposition, fatherID, motherID, colorID, currentWeight } = req.body;
     
@@ -162,7 +167,108 @@ app.post('/animals', async (req, res) => {
     }
 });
 
+// Get all animals ***NO POSTMAN TEST***
+app.get('/animals', async (req, res) => {
+    try {
+        const animals = await allQuery("getAnimals", {});
+        res.json(animals);
+    } catch (error) {
+        console.error("Error getting animals:", error);
+        res.status(500).send("Error getting animals");
+    }
+});
 
+// Update an animal ***NO POSTMAN TEST***
+app.put('/animals/:animalID', async (req, res) => {
+    const { name, type, birthDate, breedComposition, fatherID, motherID, colorID, currentWeight } = req.body;
+    
+    // Input validation
+    if (!name || !type || !birthDate || !breedComposition || !fatherID || !motherID || !colorID || !currentWeight) {
+      return res.status(400).send("All fields are required.");
+    }
+  
+    try {
+        await runQuery("updateAnimal", {name: name, type: type, birthDate: birthDate, breedComposition: breedComposition, fatherID: fatherID, motherID: motherID, colorID: colorID, currentWeight: currentWeight, animalID: req.params.animalID});
+        res.status(204).send("Animal updated");
+    } catch (error) {
+        console.error("Error updating animal:", error);
+        res.status(500).send("Error updating animal");
+    }
+});
+
+// Delete an animal ***NO POSTMAN TEST***
+app.delete('/animals/:animalID', async (req, res) => {
+    try {
+        await runQuery("deleteAnimal", {animalID: req.params.animalID});
+        res.status(204).send("Animal deleted");
+    } catch (error) {
+        console.error("Error deleting animal:", error);
+        res.status(500).send("Error deleting animal");
+    }
+});
+//#endregion
+
+//#region NotebookEntries
+// Create a notebook entry ***NO POSTMAN TEST***  also look at where animalID should be passed (req.params.animalID or in body? idk which is better)
+app.post('/notebookEntries', async (req, res) => {
+    const { animalID, content, userID, weight } = req.body;
+    
+    // Input validation
+    if (!animalID || !content || !userID || !weight) {
+      return res.status(400).send("All fields are required.");
+    }
+  
+    try {
+        await runQuery("createNotebookEntry", {animalID: animalID, content: content, userID: userID, weight: weight});
+        res.status(201).send("Notebook entry created");
+    } catch (error) {
+        console.error("Error creating notebook entry:", error);
+        res.status(500).send("Error creating notebook entry");
+    }
+});
+
+// Get notebook entries for an animal ***NO POSTMAN TEST***
+app.get('/notebookEntries/:animalID', async (req, res) => {
+    try {
+        const notebookEntries = await allQuery("getNotebookEntries", req.params.animalID);
+        res.json(notebookEntries);
+    } catch (error) {
+        console.error("Error getting notebook entries:", error);
+        res.status(500).send("Error getting notebook entries");
+    }
+});
+
+// Update a notebook entry ***NO POSTMAN TEST***
+app.put('/notebookEntries/:notebookEntryID', async (req, res) => {
+    const { content, weight, userID } = req.body;
+    
+    // Input validation
+    if (!content || !weight || !userID) {
+      return res.status(400).send("All fields are required.");
+    }
+  
+    try {
+        await runQuery("updateNotebookEntry", {content: content, weight: weight, userID: userID, notebookEntryID: req.params.notebookEntryID});
+        res.status(204).send("Notebook entry updated");
+    } catch (error) {
+        console.error("Error updating notebook entry:", error);
+        res.status(500).send("Error updating notebook entry");
+    }
+});
+
+// Delete a notebook entry ***NO POSTMAN TEST***
+app.delete('/notebookEntries/:notebookEntryID', async (req, res) => {
+    try {
+        await runQuery("deleteNotebookEntry", {notebookEntryID: req.params.notebookEntryID});
+        res.status(204).send("Notebook entry deleted");
+    } catch (error) {
+        console.error("Error deleting notebook entry:", error);
+        res.status(500).send("Error deleting notebook entry");
+    }
+});
+//#endregion
+
+//#region Users
 // Get user by username
 app.get('/users/:username', async (req, res) => {
     try {
@@ -198,6 +304,7 @@ app.post('/users', async (req, res) => {
         res.status(500).send("Error creating user");
     }
 });
+//#endregion
 //#endregion
 
 //#region Start HTTPS Server
