@@ -50,6 +50,15 @@ export function allQuery(queryFileName, params) {
     }
 }
 
+export function stringRunQuery(queryString, params) {
+    try {
+        return db.prepare(queryString).run(params);
+    } catch (error) {
+        console.error(`Error running string-run-query:`, error);
+        throw new Error(`Failed to run string-run-query: ${error.message}`);
+    }
+}
+
 function getStatementFromSQLFile(fileName) {
     try {
         const filePath = join("backend", "database", "model", `${fileName}.sql`);

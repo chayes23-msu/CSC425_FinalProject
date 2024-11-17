@@ -1,18 +1,19 @@
-import { runQuery } from "./dbUtils.js";
+import { runQuery, stringRunQuery } from "./dbUtils.js";
+import { hashPassword } from "../authentication/hasher.js";
 
-// This file can be ran to seed the database with data for testing.
+// This file can be ran to seed the database with data for testing. 
 let users = [
     {
         username: "user1",
-        password: "password1"
+        password: await hashPassword("password1")
     },
     {
         username: "user2",
-        password: "password2"
+        password: await hashPassword("password2")
     },
     {
         username: "user3",
-        password: "password3"
+        password: await hashPassword("password3")
     }
 ]
 let colors = ["Dark Brown", "Light Brown", "White", "Black", "Red", "Tan", "Grey", "Yellow", "Orange", "Green", "Blue", "Purple"];
@@ -76,38 +77,47 @@ let notebookEntries = [
     }
 ]
 
-function addColors() {
+async function addAdminAccount() {
+    let query = `INSERT INTO Users (username, password, isAdmin) VALUES (?, ?, ?);`;
+    let params = ["admin", await hashPassword("password"), 1];
+    stringRunQuery(query, params);
+}
+
+async function addColors() {
     colors.forEach(color => {
         runQuery("createColor", {color: color});
     });
 }
-addColors();
 
-function addAnimals() {
+async function addAnimals() {
     animals.forEach(animal => {
         runQuery("createAnimal", animal);
     });
 }
-addAnimals();
 
-function addBreeds() {
+async function addBreeds() {
     breeds.forEach(breed => {
         runQuery("createBreed", {breed: breed});
     });
 }
-addBreeds();
 
-function addUsers() {
+async function addUsers() {
     users.forEach(user => {
         runQuery("createUser", user);
     });
 }
-addUsers();
 
-function addNotebookEntries() {
+async function addNotebookEntries() {
     notebookEntries.forEach(entry => {
         runQuery("createNotebookEntry", entry);
     });
 }
-addNotebookEntries();
+
+// comment out what you don't want to add to the database
+await addAdminAccount();
+// await addColors();
+// await addBreeds();
+// await addAnimals();
+// await addUsers();
+// await addNotebookEntries();
 
