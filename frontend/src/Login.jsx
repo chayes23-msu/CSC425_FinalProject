@@ -1,4 +1,13 @@
 export default function Login() {
+    const loginForm = document.getElementById("loginForm");
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(loginForm);
+        const username = formData.get("username");
+        const password = formData.get("password");
+        console.log({ username, password });
+    });
+
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -14,18 +23,18 @@ export default function Login() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form action="#" method="POST" className="space-y-6">
+                    <form id="loginForm" className="space-y-6">
                         <div>
-                            <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-                                Email address
+                            <label htmlFor="username" className="block text-sm/6 font-medium text-gray-900">
+                                Username
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
+                                    id="username"
+                                    name="username"
+                                    type="text"
                                     required
-                                    autoComplete="email"
+                                    autoComplete="username"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
                                 />
                             </div>
@@ -64,12 +73,13 @@ export default function Login() {
                         </div>
                     </form>
 
-                    <p className="mt-10 text-center text-sm/6 text-gray-500">
+                    {/* Make this contact devs and have it send an email or something */}
+                    {/* <p className="mt-10 text-center text-sm/6 text-gray-500">
                         Not a member?{' '}
                         <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                             Start a 14 day free trial
                         </a>
-                    </p>
+                    </p> */}
                 </div>
             </div>
         </>
