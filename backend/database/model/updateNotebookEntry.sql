@@ -1,9 +1,9 @@
 UPDATE NotebookEntries
 SET 
-    content = $content
-    userID = $userID
-    weight = $weight
-    modifiedDate = CURRENT_TIMESTAMP
+    content = $content,
+    userID = $userID,
+    weight = $weight,
+    modifiedAt = CURRENT_TIMESTAMP
 WHERE 
     entryID = $entryID
 ;
