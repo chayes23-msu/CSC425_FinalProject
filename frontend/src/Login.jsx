@@ -1,12 +1,15 @@
+import { useAuth } from "./AuthProvider";
+
 export default function Login() {
-    const loginForm = document.getElementById("loginForm");
-    loginForm.addEventListener("submit", (event) => {
+    const auth = useAuth();
+
+    function handleSubmit(event) {
         event.preventDefault();
-        const formData = new FormData(loginForm);
+        const formData = new FormData(event.target);
         const username = formData.get("username");
         const password = formData.get("password");
-        console.log({ username, password });
-    });
+        auth.login({ username: username, password: password });
+    };
 
     return (
         <>
@@ -23,7 +26,7 @@ export default function Login() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form id="loginForm" className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
                             <label htmlFor="username" className="block text-sm/6 font-medium text-gray-900">
                                 Username

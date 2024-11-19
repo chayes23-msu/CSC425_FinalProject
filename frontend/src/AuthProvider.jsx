@@ -3,7 +3,8 @@
  * https://dev.to/miracool/how-to-manage-user-authentication-with-react-js-3ic5
  */
 
-import { useContext, useState, useNavigate, createContext } from "react";
+import { useContext, useState, createContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -16,6 +17,7 @@ const AuthProvider = ({ children }) => {
         // Call the login API
         // If successful, set the user and token
         // If unsuccessful, show an error message
+        console.log("Logging in with", loginData);
     };
 
     const logout = () => {
