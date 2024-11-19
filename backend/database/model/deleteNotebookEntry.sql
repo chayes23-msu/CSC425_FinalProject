@@ -1,2 +1,2 @@
-DELETE FROM notebook_entries
+DELETE FROM NotebookEntries
 WHERE entryID = $entryID;

@@ -1,13 +1,13 @@
-import { getQuery, runQuery, allQuery } from "./database/dbUtils.js";
-import { readFileSync } from "fs";
-import { hashPassword, verifyPassword } from "./authentication/hasher.js";
-import {
-    generateToken,
-    authenticateToken,
-} from "./authentication/tokenGenerator.js";
 import express from "express";
+import { readFileSync } from "fs";
 import https from "https";
 import morgan from "morgan";
+import { hashPassword, verifyPassword } from "./authentication/hasher.js";
+import {
+    authenticateToken,
+    generateToken,
+} from "./authentication/tokenGenerator.js";
+import { allQuery, getQuery, runQuery } from "./database/dbUtils.js";
 
 // ********** Express Server **********
 // This is unfinished starter code for the server that has the endpoints.
@@ -307,7 +307,7 @@ app.get("/notebookEntries/:animalID", async (req, res) => {
     try {
         const notebookEntries = await allQuery(
             "getNotebookEntries",
-            req.params.animalID
+            {animalID: req.params.animalID}
         );
         res.json(notebookEntries);
     } catch (error) {
@@ -330,7 +330,7 @@ app.put("/notebookEntries/:notebookEntryID", async (req, res) => {
             content: content,
             weight: weight,
             userID: userID,
-            notebookEntryID: req.params.notebookEntryID,
+            entryID: req.params.notebookEntryID,
         });
         res.status(204).send("Notebook entry updated");
     } catch (error) {
@@ -343,7 +343,7 @@ app.put("/notebookEntries/:notebookEntryID", async (req, res) => {
 app.delete("/notebookEntries/:notebookEntryID", async (req, res) => {
     try {
         await runQuery("deleteNotebookEntry", {
-            notebookEntryID: req.params.notebookEntryID,
+            entryID: req.params.notebookEntryID,
         });
         res.status(204).send("Notebook entry deleted");
     } catch (error) {
