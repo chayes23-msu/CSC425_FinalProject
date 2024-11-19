@@ -421,7 +421,7 @@ app.post("/login", async (req, res) => {
         }
         const passwordMatch = await verifyPassword(password, user.password);
         if (!passwordMatch) {
-            return res.status(401).send("Incorrect password");
+            return res.status(400).send("Incorrect password");
         } else {
             const token = generateToken(username);
             console.log("User logged in: ", username);

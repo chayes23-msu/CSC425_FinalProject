@@ -11,7 +11,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null); //user should be an object with username, userID, and isAdmin
-    const [token, setToken] = useState(sessionStorage.getItem("token") || "");
+    const [token, setToken] = useState(localStorage.getItem("token") || "");
     const navigate = useNavigate();
 
     const login = async (loginData) => {
@@ -19,13 +19,14 @@ const AuthProvider = ({ children }) => {
         // If successful, set the user and token
         // If unsuccessful, show an error message
         console.log(loginData.username + " attempting to log in");
-        api.login(loginData)
+        await api.login(loginData)
             .then((resp) => {
                 const user = resp.user;
                 user.isAdmin = user.isAdmin === 1 ? true : false;
                 setUser(user);
                 setToken(resp.token);
-                sessionStorage.setItem("token", token);
+                localStorage.setItem("token", resp.token);
+                console.log("User " + user.username + " logged in");
                 navigate("/ex");
             });
     };
@@ -33,7 +34,7 @@ const AuthProvider = ({ children }) => {
     const logout = () => {
         setUser(null);
         setToken("");
-        sessionStorage.removeItem("token");
+        localStorage.removeItem("token");
         navigate("/login");
     };
 
