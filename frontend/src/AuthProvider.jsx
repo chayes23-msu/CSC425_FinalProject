@@ -5,6 +5,7 @@
 
 import { useContext, useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { FinalProjectAPI as api } from "./apis/FinalProjectAPI";
 
 const AuthContext = createContext();
 
@@ -17,7 +18,16 @@ const AuthProvider = ({ children }) => {
         // Call the login API
         // If successful, set the user and token
         // If unsuccessful, show an error message
-        console.log("Logging in with", loginData);
+        console.log(loginData.username + " attempting to log in");
+        api.login(loginData)
+            .then((resp) => {
+                const user = resp.user;
+                user.isAdmin = user.isAdmin === 1 ? true : false;
+                setUser(user);
+                setToken(resp.token);
+                sessionStorage.setItem("token", token);
+                navigate("/ex");
+            });
     };
 
     const logout = () => {

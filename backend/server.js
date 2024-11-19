@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { readFileSync } from "fs";
 import https from "https";
 import morgan from "morgan";
@@ -21,6 +22,7 @@ if (!process.env.PORT || !process.env.KEY_PATH || !process.env.CERT_PATH) {
 const app = express();
 
 // Middleware
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use((req, res, next) => {
@@ -405,6 +407,8 @@ app.post("/users", async (req, res) => {
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
+    console.log("User attempting to log in: ", username);
+
     // Input validation
     if (!username || !password) {
         return res.status(400).send("Username and password are required.");
@@ -420,7 +424,8 @@ app.post("/login", async (req, res) => {
             return res.status(401).send("Incorrect password");
         } else {
             const token = generateToken(username);
-            return res.status(200).json({ token, "username": username, "isAdmin": user.isAdmin, "userID": user.userID });
+            console.log("User logged in: ", username);
+            return res.status(200).json({ "token": token, "user": {"username": username, "isAdmin": user.isAdmin, "userID": user.userID} });
         }
     } catch (error) {
         console.error("Error logging in:", error);

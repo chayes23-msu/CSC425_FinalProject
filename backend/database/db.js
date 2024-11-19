@@ -5,6 +5,8 @@ import { readFileSync } from 'fs';
 /*  Use this file to load or initialize databases based on the schema.
     The database file path you want to use should be set in the launch.json file.
     Keep database files in the database-files folder.
+    This database setup is based off of code at https://learn.foundersandcoders.com/learn/database/
+
 */
 let db;
 
