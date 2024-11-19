@@ -420,7 +420,7 @@ app.post("/login", async (req, res) => {
             return res.status(401).send("Incorrect password");
         } else {
             const token = generateToken(username);
-            return res.status(200).json({ token });
+            return res.status(200).json({ token, "username": username, "isAdmin": user.isAdmin, "userID": user.userID });
         }
     } catch (error) {
         console.error("Error logging in:", error);
