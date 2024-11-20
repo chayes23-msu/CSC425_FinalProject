@@ -407,7 +407,7 @@ app.post("/users", async (req, res) => {
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
-    console.log("User attempting to log in: ", username);
+    console.log("Login attempt");
 
     // Input validation
     if (!username || !password) {
@@ -417,14 +417,14 @@ app.post("/login", async (req, res) => {
     try {
         const user = await getQuery("getUser", { username: username });
         if (!user) {
-            return res.status(404).send("User not found");
+            return res.status(401).send("Invalid username or password");
         }
         const passwordMatch = await verifyPassword(password, user.password);
         if (!passwordMatch) {
-            return res.status(400).send("Incorrect password");
+            return res.status(401).send("Invalid username or password");
         } else {
             const token = generateToken(username);
-            console.log("User logged in: ", username);
+            console.log("User logged in");
             return res.status(200).json({ "token": token, "user": {"username": username, "isAdmin": user.isAdmin, "userID": user.userID} });
         }
     } catch (error) {

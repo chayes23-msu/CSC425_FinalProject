@@ -10,14 +10,16 @@ export default function Login() {
         const formData = new FormData(event.target);
         const username = formData.get("username");
         const password = formData.get("password");
-        console.log("User " + username + " attempting log in");
-        auth.login({ username: username, password: password }).then(() => {
-            console.log("User " + username + " logged in");
-            setLoginError("");
-        }).catch((err) => {
-            console.error(err.response.data);
-            setLoginError(err.response.data);
-        });
+        if (username && password) {
+            console.log("User " + username + " attempting log in");
+            auth.login({ username: username, password: password }).then(() => {
+                console.log("User " + username + " logged in");
+                setLoginError("");
+            }).catch((err) => {
+                console.error(err.response.data);
+                setLoginError(err.response.data);
+            });
+        }
     };
 
     return (
