@@ -5,22 +5,30 @@ export default function Login() {
     const auth = useAuth();
     const [loginError, setLoginError] = useState("");
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
+    
         const formData = new FormData(event.target);
         const username = formData.get("username");
         const password = formData.get("password");
-        if (username && password) {
-            console.log("User " + username + " attempting log in");
-            auth.login({ username: username, password: password }).then(() => {
-                console.log("User " + username + " logged in");
-                setLoginError("");
-            }).catch((err) => {
-                console.error(err.response.data);
-                setLoginError(err.response.data);
-            });
+    
+        if (!username || !password) {
+            setLoginError("Username and password are required.");
+            return;
         }
-    };
+    
+        console.log(`User ${username} attempting log in`);
+    
+        try {
+            await auth.login({ username, password });
+            console.log(`User ${username} logged in`);
+            setLoginError(""); // Clear any previous errors
+        } catch (err) {
+            const errorMessage = err.response?.data || "An unexpected error occurred.";
+            console.error(errorMessage);
+            setLoginError(errorMessage);
+        }
+    }
 
     return (
 

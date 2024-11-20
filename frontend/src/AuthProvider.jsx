@@ -14,20 +14,23 @@ const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token") || "");
 
     const login = async (loginData) => {
-        // Call the login API
-        // If successful, set the user and token
-        // If unsuccessful, show an error message
-        console.log(loginData.username + " attempting to log in");
-        await api.login(loginData)
-            .then((resp) => {
-                const user = resp.user;
-                user.isAdmin = user.isAdmin === 1 ? true : false;
-                setUser(user);
-                setToken(resp.token);
-                localStorage.setItem("token", resp.token);
-            }).catch((err) => {
-                return Promise.reject(err);
-            });
+        try {
+            // Call the login API
+            console.log(`${loginData.username} attempting to log in`);
+    
+            const resp = await api.login(loginData); // Await API response
+    
+            const user = resp.user;
+            user.isAdmin = user.isAdmin === 1; 
+    
+            setUser(user);
+            setToken(resp.token);
+            localStorage.setItem("token", resp.token);
+    
+            console.log(`${user.username} logged in successfully`);
+        } catch (err) {
+            return Promise.reject(err);
+        }
     };
 
     const logout = () => {
