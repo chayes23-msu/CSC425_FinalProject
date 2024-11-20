@@ -8,7 +8,8 @@ export default function Login() {
         const formData = new FormData(event.target);
         const username = formData.get("username");
         const password = formData.get("password");
-        auth.login({ username: username, password: password });
+        if(username && password)
+            auth.login({ username: username, password: password });
     };
 
     return (
