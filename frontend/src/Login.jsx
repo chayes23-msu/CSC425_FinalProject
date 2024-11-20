@@ -1,14 +1,23 @@
 import { useAuth } from "./AuthProvider";
+import { useState } from "react";
 
 export default function Login() {
     const auth = useAuth();
+    const [loginError, setLoginError] = useState("");
 
     function handleSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const username = formData.get("username");
         const password = formData.get("password");
-        auth.login({ username: username, password: password });
+        console.log("User " + username + " attempting log in");
+        auth.login({ username: username, password: password }).then(() => {
+            console.log("User " + username + " logged in");
+            setLoginError("");
+        }).catch((err) => {
+            console.error(err.response.data);
+            setLoginError(err.response.data);
+        });
     };
 
     return (
@@ -49,6 +58,10 @@ export default function Login() {
                             autoComplete="current-password"
                         />
                     </div>
+                </div>
+
+                <div>
+                    {loginError && <p>{loginError}</p>}
                 </div>
 
                 <div>

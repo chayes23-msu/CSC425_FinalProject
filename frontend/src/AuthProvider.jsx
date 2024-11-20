@@ -4,15 +4,14 @@
  */
 
 import { useContext, useState, createContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { FinalProjectAPI as api } from "./apis/FinalProjectAPI";
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null); //user should be an object with username, userID, and isAdmin
     const [token, setToken] = useState(localStorage.getItem("token") || "");
-    const navigate = useNavigate();
 
     const login = async (loginData) => {
         // Call the login API
@@ -26,8 +25,8 @@ const AuthProvider = ({ children }) => {
                 setUser(user);
                 setToken(resp.token);
                 localStorage.setItem("token", resp.token);
-                console.log("User " + user.username + " logged in");
-                navigate("/ex");
+            }).catch((err) => {
+                return Promise.reject(err);
             });
     };
 
@@ -35,7 +34,6 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setToken("");
         localStorage.removeItem("token");
-        navigate("/login");
     };
 
     return <AuthContext.Provider value={{ token, user, login, logout}}>{children}</AuthContext.Provider>;

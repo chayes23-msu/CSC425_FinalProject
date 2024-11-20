@@ -4,20 +4,22 @@
  * https://semaphoreci.com/blog/api-layer-react
  */
 
-import { api } from './configs/axiosConfigs';
-import { defineCancelApiObject } from './configs/axiosUtils';
+import axios from "axios";
+
+const api = axios.create({
+    baseURL: "https://localhost:5000",
+});
 
 export const FinalProjectAPI = {
-    login: async function (loginData, cancel = false) {
-        const resp = await api.request({
+    login: async function (loginData) {
+        await api.request({
             url: '/login',
             method: "POST",
             data: loginData,
-            signal: cancel ? cancelApiObject[this.login.name].handleRequestCancellation().signal : undefined,
+        }).then((resp) => {
+            return resp.data;
+        }).catch((err) => {
+            return Promise.reject(err);
         });
-
-        return resp.data;
     }
 }
-
-const cancelApiObject = defineCancelApiObject(FinalProjectAPI); 
