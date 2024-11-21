@@ -7,6 +7,7 @@ import { useAuth } from './AuthProvider';
 import '@mantine/core/styles.css';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { CollapseDesktop } from './CollapseDesktop.jsx';
+import Home from './Home.jsx';
 
 
 export default function App() {
@@ -16,20 +17,22 @@ export default function App() {
     });
 
     return (
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme}  defaultColorScheme='dark'>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={
-                        auth.token ? <Navigate to="/ex" replace /> : <Navigate to="/login" replace />
+                        auth.token ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />
                     } />
                     <Route path="/login" element={
-                        auth.token ? <Navigate to="/ex" replace /> : <Login replace />}
+                        auth.token ? <Navigate to="/home" replace /> : <Login replace />}
                     />
                 </Routes>
                 <CollapseDesktop>
                     <Routes>
                         <Route element={<PrivateRoute />}>
-                            <Route path="/ex" element={<h1>You&apos;ve logged in!!!</h1>} />
+                            <Route path="/home" element={
+                                <Home />
+                            } />
                         </Route>
                     </Routes>
                 </CollapseDesktop>

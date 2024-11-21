@@ -1,4 +1,7 @@
 import axios from "axios";
+import {useAuth} from "../AuthProvider";
+
+const auth = useAuth();
 
 const api = axios.create({
     baseURL: "https://localhost:5000",
@@ -21,6 +24,24 @@ export const FinalProjectAPI = {
                 data: loginData,
             });
             return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Fetches all animals.
+     * @returns {Promise<object[]>} Resolves with an array of animals if successful, rejects with an error otherwise.
+     */
+    getAnimals: async function () {
+        try {
+            const response = await api.request({
+                url: '/api/animals',
+                method: "GET",
+            });
+            console.log(response.data);
+            return response.data;
+            
         } catch (err) {
             return Promise.reject(err);
         }

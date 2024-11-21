@@ -33,13 +33,28 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    const getAnimals = async () => {
+        try {
+            // Call the getAnimals API
+            console.log(`Fetching animals`);
+    
+            const resp = await api.getAnimals(); // Await API response
+    
+            console.log(`Animals fetched successfully`);
+            return resp;
+        } catch (err) {
+            console.error("Error fetching animals:", err);
+            return Promise.reject(err);
+        }
+    };
+
     const logout = () => {
         setUser(null);
         setToken("");
         localStorage.removeItem("token");
     };
 
-    return <AuthContext.Provider value={{ token, user, login, logout}}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ token, user, login, logout, getAnimals}}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
