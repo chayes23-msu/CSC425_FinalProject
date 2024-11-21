@@ -3,19 +3,21 @@ import { useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import { Outlet } from 'react-router-dom';
 import { IconUserCircle } from '@tabler/icons-react'
+import { useNavigate } from 'react-router-dom';
 
 // This component is a wrapper for the protected routes that adds a nav bar with a header
 // Icons from https://tabler.io/icons 
 
 
 export function CollapseDesktop({ children }) {
+    const navigate = useNavigate();
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
     class navLink {
-        constructor(label, href, icon) {
+        constructor(label, route, icon) {
             this.label = label;
-            this.href = href;
+            this.route = route;
             this.icon = icon;
         }
     }
@@ -23,6 +25,10 @@ export function CollapseDesktop({ children }) {
         new navLink("Account", "/account", <IconUserCircle size="1rem" stroke={1.5} />),
         //new navLink(...)
     ];
+
+    const handleNavLinkClick = (route) => {
+        navigate(route);
+    }
 
     return (
         <AppShell
@@ -45,10 +51,11 @@ export function CollapseDesktop({ children }) {
                 Navigation
                 {navLinks.map((navLink) => {
                     return <NavLink 
+                        component="button"
                         key={navLink.label}
                         label={navLink.label}
-                        href={navLink.href}
                         leftSection={navLink.icon}
+                        onClick={() => handleNavLinkClick(navLink.route)}
                     />
                 })}
             </AppShell.Navbar>
