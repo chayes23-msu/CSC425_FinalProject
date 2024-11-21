@@ -19,7 +19,7 @@
     position: relative;
     z-index: 1;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         padding-top: 120px;
     }
 }
@@ -32,7 +32,7 @@
     font-weight: 900;
     font-size: 38px;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         font-size: 32px;
     }
 }
