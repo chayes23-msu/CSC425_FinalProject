@@ -7,6 +7,7 @@ import { useAuth } from './authentication/AuthProvider.jsx';
 import '@mantine/core/styles.css';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { CollapseDesktop } from './CollapseDesktop.jsx';
+import { NotFound } from './pages/not-found/NotFound.jsx';
 
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
                             <Route path="/account" element={<h1>Account</h1>} />
                         </Route>
                     </Route>
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
         </MantineProvider>
