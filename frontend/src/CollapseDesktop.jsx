@@ -1,6 +1,7 @@
 import { AppShell, Burger, Group, Skeleton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantinex/mantine-logo';
+import { Outlet } from 'react-router-dom';
 
 // This component is a wrapper for the protected routes that adds a nav bar with a header
 
@@ -34,7 +35,7 @@ export function CollapseDesktop({ children }) {
                     ))}
             </AppShell.Navbar>
             <AppShell.Main>
-                { children }
+                <Outlet />
             </AppShell.Main>
         </AppShell>
     );

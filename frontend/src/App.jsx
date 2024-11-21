@@ -20,19 +20,17 @@ export default function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={
-                        auth.token ? <Navigate to="/ex" replace /> : <Navigate to="/login" replace />
-                    } />
-                    <Route path="/login" element={
-                        auth.token ? <Navigate to="/ex" replace /> : <Login replace />}
+                        auth.loggedIn() ? <Navigate to="/ex" replace /> : <Navigate to="/login" replace />}
                     />
-                </Routes>
-                <CollapseDesktop>
-                    <Routes>
-                        <Route element={<PrivateRoute />}>
+                    <Route path="/login" element={
+                        auth.loggedIn() ? <Navigate to="/ex" replace /> : <Login />}
+                    />
+                    <Route element={<PrivateRoute />}>
+                        <Route element={<CollapseDesktop />}>
                             <Route path="/ex" element={<h1>You&apos;ve logged in!!!</h1>} />
                         </Route>
-                    </Routes>
-                </CollapseDesktop>
+                    </Route>
+                </Routes>
             </BrowserRouter>
         </MantineProvider>
     );

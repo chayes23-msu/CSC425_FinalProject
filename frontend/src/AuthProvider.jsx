@@ -5,6 +5,7 @@
 
 import { useContext, useState, createContext } from "react";
 import { FinalProjectAPI as api } from "./apis/FinalProjectAPI";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -39,7 +40,19 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem("token");
     };
 
-    return <AuthContext.Provider value={{ token, user, login, logout}}>{children}</AuthContext.Provider>;
+    const loggedIn = () => {
+        if(!token)
+            return false;
+
+        if(jwtDecode(token).exp <= Math.round(Date.now() / 1000)) {
+            logout();
+            return false;
+        }
+
+        return true;
+    }
+
+    return <AuthContext.Provider value={{ token, user, login, logout, loggedIn}}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
