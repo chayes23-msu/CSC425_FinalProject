@@ -28,6 +28,7 @@ export default function App() {
                     <Route element={<PrivateRoute />}>
                         <Route element={<CollapseDesktop />}>
                             <Route path="/ex" element={<h1>You&apos;ve logged in!!!</h1>} />
+                            <Route path="/account" element={<h1>Account</h1>} />
                         </Route>
                     </Route>
                 </Routes>
