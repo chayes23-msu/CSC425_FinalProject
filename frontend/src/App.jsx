@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import './index.css'
-import Login from './Login.jsx'
+import Login from './pages/login/Login.jsx'
 import PrivateRoute from './PrivateRoute.jsx';
-import { useAuth } from './AuthProvider';
+import { useAuth } from './authentication/AuthProvider.jsx';
 import '@mantine/core/styles.css';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { CollapseDesktop } from './CollapseDesktop.jsx';

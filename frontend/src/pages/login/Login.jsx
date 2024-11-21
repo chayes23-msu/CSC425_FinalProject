@@ -11,7 +11,7 @@ import {
     Title,
   } from '@mantine/core';
 import classes from './Login.module.css';
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../../authentication/AuthProvider";
 import { useState } from "react";
 
 export default function Login() {

@@ -4,7 +4,7 @@
  */
 
 import { useContext, useState, createContext } from "react";
-import { FinalProjectAPI as api } from "./apis/FinalProjectAPI";
+import { FinalProjectAPI as api } from "../apis/FinalProjectAPI";
 import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
