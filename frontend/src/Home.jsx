@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconSearch, IconSelector, IconAlertCircle } from '@tabler/icons-react';
 import { useState, useEffect } from "react";
+import { FinalProjectAPI } from './apis/FinalProjectAPI';
 import classes from './Home.module.css';
 
 function Th({ children, reversed, sorted, onSort }) {
@@ -75,59 +76,33 @@ function TableSort() {
     currentWeight: '',
   });
 
-  // Fake data for testing
-  const fakeData = [
-    {
-      animalID: 1,
-      name: 'Bella',
-      type: 'Cow',
-      birthDate: '2020-01-01',
-      breedComposition: 'Holstein',
-      fatherID: 101,
-      motherID: 102,
-      colorID: 1,
-      currentWeight: 500,
-    },
-    {
-      animalID: 2,
-      name: 'Max',
-      type: 'Cow',
-      birthDate: '2019-05-15',
-      breedComposition: 'Jersey',
-      fatherID: 103,
-      motherID: 104,
-      colorID: 2,
-      currentWeight: 600,
-    },
-    {
-      animalID: 3,
-      name: 'Lucy',
-      type: 'Cow',
-      birthDate: '2021-03-22',
-      breedComposition: 'Angus',
-      fatherID: 105,
-      motherID: 106,
-      colorID: 3,
-      currentWeight: 550,
-    },
-  ];
-
   useEffect(() => {
-    // Simulate fetching data
-    setSortedData(fakeData);
+    async function fetchAnimals() {
+      try {
+        const response = await FinalProjectAPI.getAnimals();
+        setSortedData(response);
+        setFetchError(""); // Clear any previous errors
+      } catch (err) {
+        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+        console.error("Error fetching animals:", errorMessage);
+        setFetchError(errorMessage);
+      }
+    }
+
+    fetchAnimals();
   }, []);
 
   const setSorting = (field) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(fakeData, { sortBy: field, reversed, search }));
+    setSortedData(sortData(sortedData, { sortBy: field, reversed, search }));
   };
 
   const handleSearchChange = (event) => {
     const value = event.currentTarget.value;
     setSearch(value);
-    setSortedData(sortData(fakeData, { sortBy, reversed: reverseSortDirection, search: value }));
+    setSortedData(sortData(sortedData, { sortBy, reversed: reverseSortDirection, search: value }));
   };
 
   const handleInputChange = (event) => {
@@ -145,7 +120,9 @@ function TableSort() {
       <Table.Td>{row.motherID}</Table.Td>
       <Table.Td>{row.colorID}</Table.Td>
       <Table.Td>{row.currentWeight}</Table.Td>
-      <CloseButton className={classes.closeButton} />
+      <Table.Td>
+        <CloseButton className={classes.closeButton} />
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -293,7 +270,7 @@ function TableSort() {
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={8}>
+              <Table.Td colSpan={9}>
                 <Text fw={500} ta="center">
                   Nothing found
                 </Text>

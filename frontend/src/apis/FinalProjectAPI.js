@@ -54,7 +54,7 @@ export const FinalProjectAPI = {
     getAnimals: async function () {
         try {
             const response = await api.request({
-                url: '/api/animals',
+                url: '/animals',
                 method: "GET",
             });
             console.log(response.data);
