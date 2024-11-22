@@ -16,3 +16,20 @@
     height: 21px;
     border-radius: 21px;
   }
+
+  .tableRow {
+    position: relative;
+  }
+  
+  .closeButton {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .tableRow:hover .closeButton {
+    opacity: 1;
+  }
