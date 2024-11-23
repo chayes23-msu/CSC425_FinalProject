@@ -27,6 +27,7 @@ const AuthProvider = ({ children }) => {
             setUser(user);
             setToken(resp.token);
             localStorage.setItem("token", resp.token);
+            api.setToken(resp.token);
     
             console.log(`${user.username} logged in successfully`);
         } catch (err) {
@@ -38,6 +39,7 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setToken("");
         localStorage.removeItem("token");
+        api.setToken(null);
     };
 
     const loggedIn = () => {

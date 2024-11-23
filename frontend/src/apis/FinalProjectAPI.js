@@ -8,10 +8,9 @@ const api = axios.create({
     baseURL: "https://localhost:5000",
 });
 
-
 api.interceptors.request.use(
     (config) => {
-        if(token) {
+        if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
@@ -21,14 +20,15 @@ api.interceptors.request.use(
     }
 );
 
-
 /**
  * FinalProjectAPI module for API calls.
  */
 export const FinalProjectAPI = {
     setToken: (newToken) => {
-        this.token = newToken;
+        token = newToken;
+        localStorage.setItem("token", newToken);
     },
+
     /**
      * Logs in a user.
      * @param {{ username: string, password: string }} loginData - The login credentials.
@@ -59,12 +59,16 @@ export const FinalProjectAPI = {
             });
             console.log(response.data);
             return response.data;
-            
         } catch (err) {
             return Promise.reject(err);
         }
     },
 
+    /**
+     * Creates a new animal.
+     * @param {object} animalData - The data for the new animal.
+     * @returns {Promise<object>} Resolves with the created animal data if successful, rejects with an error otherwise.
+     */
     createAnimal: async function (animalData) {
         try {
             const response = await api.request({
@@ -78,11 +82,32 @@ export const FinalProjectAPI = {
         }
     },
 
+    /**
+     * Deletes an animal.
+     * @param {number} animalID - The ID of the animal to delete.
+     * @returns {Promise<object>} Resolves with the deleted animal data if successful, rejects with an error otherwise.
+     */
     deleteAnimal: async function (animalID) {
         try {
             const response = await api.request({
                 url: `/animals/${animalID}`,
                 method: "DELETE",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Fetches all colors.
+     * @returns {Promise<object[]>} Resolves with an array of colors if successful, rejects with an error otherwise.
+     */
+    getColors: async function () {
+        try {
+            const response = await api.request({
+                url: '/colors',
+                method: "GET",
             });
             return response.data;
         } catch (err) {
