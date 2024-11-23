@@ -1,4 +1,4 @@
 UPDATE Users
-SET username = $username,
+SET
     password = $password
 WHERE userID = $userID;

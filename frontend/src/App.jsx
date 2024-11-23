@@ -8,6 +8,7 @@ import '@mantine/core/styles.css';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { CollapseDesktop } from './CollapseDesktop.jsx';
 import { NotFound } from './pages/not-found/NotFound.jsx';
+import Account from './pages/account-settings/Account.jsx';
 
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
                     <Route element={<PrivateRoute />}>
                         <Route element={<CollapseDesktop />}>
                             <Route path="/ex" element={<h1>You&apos;ve logged in!!!</h1>} />
-                            <Route path="/account" element={<h1>Account</h1>} />
+                            <Route path="/account" element={<Account />} />
                         </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />

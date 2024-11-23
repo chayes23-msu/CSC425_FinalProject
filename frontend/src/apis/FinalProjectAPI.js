@@ -58,5 +58,48 @@ export const FinalProjectAPI = {
         } catch (err) {
             return Promise.reject(err);
         }
-    }
+    },
+
+    /**
+     * 
+     * @param {int} userID UserID of the user to update.
+     * @param {{password: string}} newUserData 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    updateUserPassword: async function (userID, newPasswordData) {
+        try {
+            const response = await api.request({
+                url: `/users/${userID}`,
+                method: "PUT",
+                data: newPasswordData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    getUserByID: async function (userID) {
+        try {
+            const response = await api.request({
+                url: `/users/${userID}`,
+                method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    getUserByName: async function (username) {
+        try {
+            const response = await api.request({
+                url: `/users/${username}`,
+                method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
 };

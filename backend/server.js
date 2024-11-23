@@ -359,7 +359,7 @@ app.delete("/notebookEntries/:notebookEntryID", async (req, res) => {
 // Get user by username
 app.get("/users/:username", async (req, res) => {
     try {
-        const user = await getQuery("getUser", { username: req.params.username });
+        const user = await getQuery("getUserByName", { username: req.params.username });
 
         if (!user) {
             return res.status(404).send("User not found");
@@ -377,7 +377,7 @@ app.post("/users", async (req, res) => {
     const { username, password } = req.body;
 
     // Check if user is an admin (authenticateToken attaches username from the token to the request object)
-    if (await getQuery("getUser", req.username).isAdmin == false) {
+    if (await getQuery("getUserByName", req.username).isAdmin == false) {
         return res.status(403).send("You do not have permission to create a user.");
     }
 
@@ -399,25 +399,29 @@ app.post("/users", async (req, res) => {
     }
 });
 
-// Update a user
+// Update a user (only password field can be updated) (for use by non-admin users)
 app.put("/users/:userID", async (req, res) => {
-    const { username, password } = req.body;
+    const { password, currentPassword } = req.body;
 
-    if(!username || !password) {
-        return res.status(400).send("All fields are required.");
+    if(!password || !currentPassword) {
+        return res.status(400).send("Old and current passwords required.");
+    }
+
+    const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
+    if (!passwordMatch) {
+        return res.status(401).send("Current password input is incorrect.");
     }
 
     try {
         const hashedPassword = await hashPassword(password);
-        await runQuery("updateUser", {
+        await runQuery("updateUserPassword", {
             userID: req.params.userID,
             password: hashedPassword,
-            username: username,
         });
-        res.status(204).send("User updated");
+        res.status(204).send("Password updated");
     } catch (error) {
-        console.error("Error updating user:", error);
-        res.status(500).send("Error updating user");
+        console.error("Error updating password:", error);
+        res.status(500).send("Error updating password");
     }
 });
 //#endregion
@@ -438,7 +442,7 @@ app.post("/login", async (req, res) => {
     }
 
     try {
-        const user = await getQuery("getUser", { username: username });
+        const user = await getQuery("getUserByName", { username: username });
         if (!user) {
             return res.status(401).send("Invalid username or password");
         }
