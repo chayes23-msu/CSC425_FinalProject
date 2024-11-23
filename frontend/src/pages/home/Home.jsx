@@ -1,22 +1,26 @@
 import {
-    Center,
-    Group,
-    ScrollArea,
-    Table,
-    Text,
-    TextInput,
-    UnstyledButton,
-    Alert,
-    Button,
-    Drawer,
-    CloseButton
+  Alert,
+  Button,
+  Center,
+  CloseButton,
+  Drawer,
+  Group,
+  ScrollArea,
+  Table,
+  Text,
+  TextInput,
+  UnstyledButton
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { IconChevronDown, IconChevronUp, IconSearch, IconSelector, IconAlertCircle } from '@tabler/icons-react';
-import { useState, useEffect } from "react";
 import { useDisclosure } from '@mantine/hooks';
-import { FinalProjectAPI } from './apis/FinalProjectAPI';
+import { useEffect, useState } from "react";
+import { FinalProjectAPI } from '../../apis/FinalProjectAPI';
 import classes from './Home.module.css';
+import IconChevronDown from '../../assets/icon-components/IconChevronDown';
+import IconChevronUp from '../../assets/icon-components/IconChevronUp';
+import IconSearch from '../../assets/icon-components/IconSearch';
+import IconSelector from '../../assets/icon-components/IconSelector';
+import IconAlertCircle from '../../assets/icon-components/IconAlertCircle';
 
 function Th({ children, reversed, sorted, onSort }) {
   const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;

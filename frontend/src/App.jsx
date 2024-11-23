@@ -1,14 +1,13 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
-import './index.css'
-import Login from './pages/login/Login.jsx'
-import PrivateRoute from './PrivateRoute.jsx';
-import { useAuth } from './authentication/AuthProvider.jsx';
-import '@mantine/core/styles.css';
 import { MantineProvider, createTheme } from '@mantine/core';
+import '@mantine/core/styles.css';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useAuth } from './authentication/AuthProvider.jsx';
 import { CollapseDesktop } from './CollapseDesktop.jsx';
-import Home from './Home.jsx';
+import './index.css';
+import Home from './pages/home/Home.jsx';
+import Login from './pages/login/Login.jsx';
 import { NotFound } from './pages/not-found/NotFound.jsx';
+import PrivateRoute from './PrivateRoute.jsx';
 
 
 export default function App() {
