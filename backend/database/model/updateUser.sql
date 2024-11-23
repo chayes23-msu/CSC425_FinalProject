@@ -1,5 +1,4 @@
 UPDATE Users
-SET userName = $username,
-    password = $password,
-    isAdmin = $isAdmin
+SET username = $username,
+    password = $password
 WHERE userID = $userID;

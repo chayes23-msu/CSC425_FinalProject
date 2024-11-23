@@ -7,7 +7,7 @@ import { hashPassword, verifyPassword } from "./authentication/hasher.js";
 import {
     authenticateToken,
     generateToken,
-} from "./authentication/tokenGenerator.js";
+} from "./authentication/tokenUtil.js";
 import { allQuery, getQuery, runQuery } from "./database/dbUtils.js";
 
 // ********** Express Server **********
@@ -376,7 +376,8 @@ app.get("/users/:username", async (req, res) => {
 app.post("/users", async (req, res) => {
     const { username, password } = req.body;
 
-    if (getQuery("getUser", req.username).isAdmin == false) {
+    // Check if user is an admin (authenticateToken attaches username from the token to the request object)
+    if (await getQuery("getUser", req.username).isAdmin == false) {
         return res.status(403).send("You do not have permission to create a user.");
     }
 
@@ -395,6 +396,28 @@ app.post("/users", async (req, res) => {
     } catch (error) {
         console.error("Error creating user:", error);
         res.status(500).send("Error creating user");
+    }
+});
+
+// Update a user
+app.put("/users/:userID", async (req, res) => {
+    const { username, password } = req.body;
+
+    if(!username || !password) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    try {
+        const hashedPassword = await hashPassword(password);
+        await runQuery("updateUser", {
+            userID: req.params.userID,
+            password: hashedPassword,
+            username: username,
+        });
+        res.status(204).send("User updated");
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).send("Error updating user");
     }
 });
 //#endregion
