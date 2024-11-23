@@ -63,5 +63,30 @@ export const FinalProjectAPI = {
         } catch (err) {
             return Promise.reject(err);
         }
+    },
+
+    createAnimal: async function (animalData) {
+        try {
+            const response = await api.request({
+                url: '/animals',
+                method: "POST",
+                data: animalData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    deleteAnimal: async function (animalID) {
+        try {
+            const response = await api.request({
+                url: `/animals/${animalID}`,
+                method: "DELETE",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
     }
 };

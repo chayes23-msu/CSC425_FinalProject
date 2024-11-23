@@ -8,11 +8,13 @@ import {
     UnstyledButton,
     Alert,
     Button,
-    Modal,
+    Drawer,
     CloseButton
 } from '@mantine/core';
+import { DateInput } from '@mantine/dates';
 import { IconChevronDown, IconChevronUp, IconSearch, IconSelector, IconAlertCircle } from '@tabler/icons-react';
 import { useState, useEffect } from "react";
+import { useDisclosure } from '@mantine/hooks';
 import { FinalProjectAPI } from './apis/FinalProjectAPI';
 import classes from './Home.module.css';
 
@@ -64,7 +66,7 @@ function TableSort() {
   const [sortBy, setSortBy] = useState(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [fetchError, setFetchError] = useState("");
-  const [modalOpened, setModalOpened] = useState(false);
+  const [drawerOpened, { open, close }] = useDisclosure(false);
   const [newAnimal, setNewAnimal] = useState({
     name: '',
     type: '',
@@ -110,6 +112,23 @@ function TableSort() {
     setNewAnimal({ ...newAnimal, [name]: value });
   };
 
+  const handleDateChange = (date) => {
+    setNewAnimal({ ...newAnimal, birthDate: date });
+  };
+
+  const handleSave = async () => {
+    try {
+        await FinalProjectAPI.createAnimal(newAnimal);
+        close();
+        // Optionally, you can refetch the animals to update the table
+        fetchAnimals();
+    } catch (err) {
+        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+        console.error("Error creating animal:", errorMessage);
+        setFetchError(errorMessage);
+    }
+  };
+
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.animalID} className={classes.tableRow}>
       <Table.Td>{row.name}</Table.Td>
@@ -133,11 +152,14 @@ function TableSort() {
           {fetchError}
         </Alert>
       )}
-      <Button onClick={() => setModalOpened(true)} mb="md">Add New Animal</Button>
-      <Modal
-        opened={modalOpened}
-        onClose={() => setModalOpened(false)}
+      <Button onClick={open} mb="md">Add New Animal</Button>
+      <Drawer
+        opened={drawerOpened}
+        onClose={close}
         title="Add New Animal"
+        padding="md"
+        size="md"
+        position='right'
       >
         <TextInput
           label="Name"
@@ -153,11 +175,13 @@ function TableSort() {
           onChange={handleInputChange}
           mb="sm"
         />
-        <TextInput
+        <DateInput
           label="Birth Date"
           name="birthDate"
           value={newAnimal.birthDate}
-          onChange={handleInputChange}
+          onChange={handleDateChange}
+          size="sm" // Adjust size to fit better in the drawer
+          inputFormat="MM/DD/YYYY" // Adjust date format if needed
           mb="sm"
         />
         <TextInput
@@ -195,8 +219,8 @@ function TableSort() {
           onChange={handleInputChange}
           mb="sm"
         />
-        <Button onClick={() => setModalOpened(false)}>Save</Button>
-      </Modal>
+        <Button onClick={handleSave}>Save</Button>
+      </Drawer>
       <TextInput
         placeholder="Search by any field"
         mb="md"
