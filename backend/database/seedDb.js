@@ -26,6 +26,7 @@ let animals = [
         birthDate: "2021-01-01",
         name: "Fluffy",
         type: "cow",
+        tagNumber: "123466",
         currentWeight: 1123,
         breedComposition: "Holstein"
     },
@@ -36,6 +37,7 @@ let animals = [
         birthDate: "2020-02-24",
         name: "Bruce",
         type: "bull",
+        tagNumber: "123457",
         currentWeight: 2340,
         breedComposition: "Holstein"
     },
@@ -46,6 +48,7 @@ let animals = [
         birthDate: "2024-11-11",
         name: "Gerald",
         type: "calf",
+        tagNumber: "123456",
         currentWeight: 950,
         breedComposition: "Holstein"
     },

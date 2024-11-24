@@ -22,14 +22,28 @@
   }
   
   .closeButton {
-    position: absolute;
     right: 10px;
     top: 50%;
-    transform: translateY(-50%);
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none; /* Prevent hover interaction unless visible */
+  }
+  
+  .tableRow {
+    position: relative; /* Required for .closeButton positioning */
   }
   
   .tableRow:hover .closeButton {
     opacity: 1;
+    pointer-events: auto; /* Allow interaction when visible */
   }
+  
+  .searchBar {
+    width: 300px; /* Adjust width */
+    position: absolute; /* Allow precise positioning */
+    top: 8px; /* Adjust vertical position */
+    right: 10px; /* Adjust horizontal position */
+    z-index: 10; /* Ensure it stays above other elements if needed */
+  }
+  
+  

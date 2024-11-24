@@ -175,6 +175,7 @@ app.post("/animals", async (req, res) => {
         breedComposition,
         fatherID,
         motherID,
+        tagNumber,
         colorID,
         currentWeight,
     } = req.body;
@@ -187,6 +188,7 @@ app.post("/animals", async (req, res) => {
         !breedComposition ||
         !fatherID ||
         !motherID ||
+        !tagNumber ||
         !colorID ||
         !currentWeight
     ) {
@@ -202,6 +204,7 @@ app.post("/animals", async (req, res) => {
             fatherID: fatherID,
             motherID: motherID,
             colorID: colorID,
+            tagNumber: tagNumber,
             currentWeight: currentWeight,
         });
         res.status(201).send("Animal created");
@@ -231,6 +234,7 @@ app.put("/animals/:animalID", async (req, res) => {
         breedComposition,
         fatherID,
         motherID,
+        tagNumber,
         colorID,
         currentWeight,
     } = req.body;
@@ -243,6 +247,7 @@ app.put("/animals/:animalID", async (req, res) => {
         !breedComposition ||
         !fatherID ||
         !motherID ||
+        !tagNumber ||
         !colorID ||
         !currentWeight
     ) {
@@ -258,6 +263,7 @@ app.put("/animals/:animalID", async (req, res) => {
             fatherID: fatherID,
             motherID: motherID,
             colorID: colorID,
+            tagNumber: tagNumber,
             currentWeight: currentWeight,
             animalID: req.params.animalID,
         });

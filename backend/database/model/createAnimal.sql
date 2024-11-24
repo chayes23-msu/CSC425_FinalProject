@@ -6,6 +6,7 @@ INSERT INTO Animals
     birthDate,
     name,
     type,
+    tagNumber,
     currentWeight,
     breedComposition
     )
@@ -16,6 +17,7 @@ INSERT INTO Animals
         $birthDate,
         $name,
         $type,
+        $tagNumber,
         $currentWeight,
         $breedComposition
     );

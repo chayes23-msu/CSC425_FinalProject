@@ -1,17 +1,18 @@
 import {
-  Alert,
-  Button,
   Center,
-  CloseButton,
-  Drawer,
   Group,
   ScrollArea,
   Table,
   Text,
   TextInput,
-  UnstyledButton
+  UnstyledButton,
+  Alert,
+  Button,
+  Drawer,
+  CloseButton
 } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { DatePickerInput } from '@mantine/dates';
+import '@mantine/dates/styles.css';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from "react";
 import { FinalProjectAPI } from '../../apis/FinalProjectAPI';
@@ -21,6 +22,7 @@ import IconChevronUp from '../../assets/icon-components/IconChevronUp';
 import IconSearch from '../../assets/icon-components/IconSearch';
 import IconSelector from '../../assets/icon-components/IconSelector';
 import IconAlertCircle from '../../assets/icon-components/IconAlertCircle';
+import IconCow from '../../assets/icon-components/IconCow';
 
 function Th({ children, reversed, sorted, onSort }) {
   const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
@@ -42,9 +44,7 @@ function Th({ children, reversed, sorted, onSort }) {
 
 function filterData(data, search) {
   const query = search.toLowerCase().trim();
-  return data.filter((item) =>
-    Object.keys(data[0]).some((key) => item[key].toString().toLowerCase().includes(query))
-  );
+  return data.filter((item) => item.name.toLowerCase().includes(query));
 }
 
 function sortData(data, { sortBy, reversed, search }) {
@@ -82,21 +82,25 @@ function TableSort() {
     currentWeight: '',
   });
 
-  useEffect(() => {
-    async function fetchAnimals() {
-      try {
-        const response = await FinalProjectAPI.getAnimals();
-        setSortedData(response);
-        setFetchError(""); // Clear any previous errors
-      } catch (err) {
-        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
-        console.error("Error fetching animals:", errorMessage);
-        setFetchError(errorMessage);
-      }
+  const fetchAnimals = async () => {
+    try {
+      const response = await FinalProjectAPI.getAnimals();
+      setSortedData(response);
+      setFetchError(""); // Clear any previous errors
+    } catch (err) {
+      const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+      console.error("Error fetching animals:", errorMessage);
+      setFetchError(errorMessage);
     }
+  };
 
+  useEffect(() => {
     fetchAnimals();
   }, []);
+
+  useEffect(() => {
+    setSortedData(sortData(sortedData, { sortBy, reversed: reverseSortDirection, search }));
+  }, [search, sortBy, reverseSortDirection]);
 
   const setSorting = (field) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
@@ -108,7 +112,26 @@ function TableSort() {
   const handleSearchChange = (event) => {
     const value = event.currentTarget.value;
     setSearch(value);
-    setSortedData(sortData(sortedData, { sortBy, reversed: reverseSortDirection, search: value }));
+    if (value.trim() === '') {
+      fetchAnimals(); // Refetch the data when the search bar is cleared
+    } else {
+      setSortedData(sortData(sortedData, { sortBy, reversed: reverseSortDirection, search: value }));
+    }
+  };
+  
+
+  const handleDelete = async (animalID) => {
+    if (window.confirm("Are you sure you want to delete this animal?")) {
+      try {
+        await FinalProjectAPI.deleteAnimal(animalID);
+        // Refetch the animals to update the table
+        fetchAnimals();
+      } catch (err) {
+        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+        console.error("Error deleting animal:", errorMessage);
+        setFetchError(errorMessage);
+      }
+    }
   };
 
   const handleInputChange = (event) => {
@@ -122,33 +145,40 @@ function TableSort() {
 
   const handleSave = async () => {
     try {
-        await FinalProjectAPI.createAnimal(newAnimal);
-        close();
-        // Optionally, you can refetch the animals to update the table
-        fetchAnimals();
+      await FinalProjectAPI.createAnimal(newAnimal);
+      close();
+      // Refetch the animals to update the table
+      fetchAnimals();
     } catch (err) {
-        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
-        console.error("Error creating animal:", errorMessage);
-        setFetchError(errorMessage);
+      const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+      console.error("Error creating animal:", errorMessage);
+      setFetchError(errorMessage);
     }
   };
 
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.animalID} className={classes.tableRow}>
-      <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.type}</Table.Td>
-      <Table.Td>{row.birthDate}</Table.Td>
-      <Table.Td>{row.breedComposition}</Table.Td>
-      <Table.Td>{row.fatherID}</Table.Td>
-      <Table.Td>{row.motherID}</Table.Td>
-      <Table.Td>{row.colorID}</Table.Td>
-      <Table.Td>{row.currentWeight}</Table.Td>
-      <Table.Td>
-        <CloseButton className={classes.closeButton} />
+      <Table.Td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+        <button 
+          onClick={() => console.log(`Cow icon clicked for animal ID: ${row.animalID}`)} 
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            outline: 'none',
+          }}
+          aria-label={`View details for animal ID: ${row.animalID}`}
+        >
+          <IconCow style={{ width: '24px', height: '24px', display: 'block' }} />
+        </button>
+      </Table.Td><Table.Td>{row.name}</Table.Td><Table.Td>{row.type}</Table.Td><Table.Td>{row.birthDate}</Table.Td><Table.Td>{row.breedComposition}</Table.Td><Table.Td>{row.fatherID}</Table.Td><Table.Td>{row.motherID}</Table.Td><Table.Td>{row.colorID}</Table.Td><Table.Td>{row.currentWeight}</Table.Td><Table.Td>
+        <CloseButton className={classes.closeButton} onClick={() => handleDelete(row.animalID)} />
       </Table.Td>
     </Table.Tr>
   ));
-
+  
+  
   return (
     <ScrollArea>
       {fetchError && (
@@ -179,14 +209,15 @@ function TableSort() {
           onChange={handleInputChange}
           mb="sm"
         />
-        <DateInput
+        <DatePickerInput
           label="Birth Date"
           name="birthDate"
           value={newAnimal.birthDate}
           onChange={handleDateChange}
           size="sm" // Adjust size to fit better in the drawer
-          inputFormat="MM/DD/YYYY" // Adjust date format if needed
           mb="sm"
+          dropdownType='modal'
+          valueFormat='YYYY-MM-DD'
         />
         <TextInput
           label="Breed Composition"
@@ -231,10 +262,12 @@ function TableSort() {
         leftSection={<IconSearch size={16} stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
+        className={classes.searchBar} // Apply custom styles
       />
-      <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
-        <Table.Tbody>
+        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
+        <Table.Thead>
           <Table.Tr>
+            <Table.Th></Table.Th> {/* Empty header cell for the cow icon */}
             <Th
               sorted={sortBy === 'name'}
               reversed={reverseSortDirection}
@@ -291,14 +324,15 @@ function TableSort() {
             >
               Current Weight
             </Th>
+            <Table.Th></Table.Th> {/* Empty header cell for the delete button */}
           </Table.Tr>
-        </Table.Tbody>
+        </Table.Thead>
         <Table.Tbody>
           {rows.length > 0 ? (
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={9}>
+              <Table.Td colSpan={10}>
                 <Text fw={500} ta="center">
                   Nothing found
                 </Text>
@@ -314,7 +348,7 @@ function TableSort() {
 export default function Home() {
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1>Home</h1>
       <TableSort />
     </div>
   );

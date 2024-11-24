@@ -6,6 +6,7 @@ SET name = $name,
     fatherID = $fatherID,
     motherID = $motherID,
     colorID = $colorID,
+    tagNumber = $tagNumber,
     currentWeight = $currentWeight
 WHERE animalID = $animalID;
 
