@@ -9,6 +9,8 @@ import { MantineProvider, createTheme } from '@mantine/core';
 import { CollapseDesktop } from './CollapseDesktop.jsx';
 import { NotFound } from './pages/not-found/NotFound.jsx';
 import Account from './pages/account-settings/Account.jsx';
+import { Notifications } from '@mantine/notifications'
+import '@mantine/notifications/styles.css';
 
 
 export default function App() {
@@ -19,6 +21,7 @@ export default function App() {
 
     return (
         <MantineProvider theme={theme}>
+            <Notifications autoClose={6000}/>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={
