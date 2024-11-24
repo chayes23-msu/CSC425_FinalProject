@@ -17,6 +17,7 @@ export default function Account() {
             return true;
         } catch (err) {
             console.error(err);
+            notifications.show({title: "Oops!", message: err.response?.data, color: 'red'});
             return false;
         }
     };
