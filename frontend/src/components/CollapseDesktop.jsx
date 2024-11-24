@@ -2,7 +2,7 @@ import { AppShell, Burger, Group, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import { Outlet } from 'react-router-dom';
-import IconUser from './assets/icon-components/IconUser';
+import IconUser from '../assets/icon-components/IconUser';
 import { useNavigate } from 'react-router-dom';
 
 // This component is a wrapper for the protected routes that adds a nav bar with a header

@@ -4,7 +4,7 @@ import { FinalProjectAPI as api } from '../../apis/FinalProjectAPI';
 import { useAuth } from '../../authentication/AuthProvider';
 import PasswordInputWithStrength from '../../components/PasswordInputWithStrength';
 import IconLock from '../../assets/icon-components/IconLock';
-import { notifications } from '@mantine/notifications';
+import { showErrorNotification, showSuccessNotification } from '../../notifications/notificationFunctions.jsx';
 
 export default function Account() {
     const auth = useAuth();
@@ -12,12 +12,12 @@ export default function Account() {
     const updateUserPassword = async (values) => {
         try {
             await api.updateUserPassword(auth.user.userID, { password: values.newPassword, currentPassword: values.currentPassword });
+            showSuccessNotification("Password updated successfully");
             console.log('Password updated');
-            notifications.show({title: "Success!", message: "Password changed successfully", color: 'teal'});
             return true;
         } catch (err) {
+            showErrorNotification(err.response?.data);
             console.error(err);
-            notifications.show({title: "Oops!", message: err.response?.data, color: 'red'});
             return false;
         }
     };
