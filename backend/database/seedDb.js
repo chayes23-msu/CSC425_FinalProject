@@ -115,9 +115,9 @@ async function addNotebookEntries() {
 
 // comment out what you don't want to add to the database
 await addAdminAccount();
-// await addColors();
-// await addBreeds();
-// await addAnimals();
-// await addUsers();
-// await addNotebookEntries();
+await addColors();
+await addBreeds();
+await addAnimals();
+await addUsers();
+await addNotebookEntries();
 

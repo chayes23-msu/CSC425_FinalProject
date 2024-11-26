@@ -9,25 +9,22 @@ import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
+const getUserFromToken = (token) => {
+    if (token) {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.user; // Assuming `user` contains username, userID, and isAdmin
+    }
+    return null; // Return null if no token exists
+};
+
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null); //user should be an object with username, userID, and isAdmin
     const [token, setToken] = useState(localStorage.getItem("token") || "");
+    const [user, setUser] = useState(getUserFromToken(token)); //user should be an object with username, userID, and isAdmin
 
     useEffect(() => {
-        async function getAndSetUserFromToken() {
-            if (token) {
-                const decodedToken = jwtDecode(token);
-                if(!loggedIn())
-                    return;
-                try {
-                    setUser(await api.getUserByName(decodedToken.username));
-                } catch (err) {
-                    console.error(err);
-                }
-            }
-        }
-        getAndSetUserFromToken();
+        setUser(getUserFromToken(token));
+        api.setToken(token);
     }, [token]);
 
     const login = async (loginData) => {
@@ -42,8 +39,8 @@ const AuthProvider = ({ children }) => {
 
             setUser(user);
             setToken(resp.token);
-            localStorage.setItem("token", resp.token);
             api.setToken(resp.token);
+            localStorage.setItem("token", resp.token);
 
             console.log(`${user.username} logged in successfully`);
         } catch (err) {

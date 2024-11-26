@@ -450,9 +450,11 @@ app.post("/login", async (req, res) => {
         if (!passwordMatch) {
             return res.status(401).send("Invalid username or password");
         } else {
-            const token = generateToken(username);
+            delete user.password;
+            const token = generateToken(user); // Generate token with the user payload
             console.log("User logged in");
-            return res.status(200).json({ "token": token, "user": {"username": username, "isAdmin": user.isAdmin, "userID": user.userID} });
+            // Send the user in the response (the user object is the same as the one in the payload of the token)
+            return res.status(200).json({ "token": token, "user": user });
         }
     } catch (error) {
         console.error("Error logging in:", error);

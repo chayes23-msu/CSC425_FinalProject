@@ -23,7 +23,7 @@ api.interceptors.request.use(
  */
 export const FinalProjectAPI = {
     setToken: (newToken) => {
-        this.token = newToken;
+        token = newToken;
     },
 
     /**

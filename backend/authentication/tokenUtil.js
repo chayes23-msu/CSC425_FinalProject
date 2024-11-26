@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.SECRET_KEY
 
-export function generateToken(username) {
+export function generateToken(user) {
     // Payload can include user data, like ID or role
     const payload = {
-        username: username,
+        user: user,
     };
     
     // Sign the token with the secret key and set an expiration time

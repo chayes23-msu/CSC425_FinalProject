@@ -47,7 +47,7 @@ export default function Account() {
         validateInputOnChange: true,
 
         validate: {
-            newUsername: (value) => !value ? 'New username is required' : value === auth.user.username ? 'New username cannot be the same as the old one' : null,
+            username: (value) => !value ? 'New username is required' : value === auth.user.username ? 'New username cannot be the same as the old one' : null,
         },
     });
 
@@ -64,8 +64,8 @@ export default function Account() {
                     label='New username'
                     placeholder='New username'
                     leftSection={<IconUser />}
-                    key={usernameForm.key('newUsername')}
-                    {...usernameForm.getInputProps('newUsername')}
+                    key={usernameForm.key('username')}
+                    {...usernameForm.getInputProps('username')}
                 >
                 </TextInput>
             </form>)}
