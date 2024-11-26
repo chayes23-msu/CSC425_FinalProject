@@ -1,10 +1,11 @@
 import { useForm } from '@mantine/form';
-import { Button, Box, PasswordInput, Group, Title } from '@mantine/core';
+import { Button, Box, PasswordInput, Group, Title, TextInput } from '@mantine/core';
 import { FinalProjectAPI as api } from '../../apis/FinalProjectAPI';
 import { useAuth } from '../../authentication/AuthProvider';
 import PasswordInputWithStrength from '../../components/PasswordInputWithStrength';
 import IconLock from '../../assets/icon-components/IconLock';
 import { showErrorNotification, showSuccessNotification } from '../../notifications/notificationFunctions.jsx';
+import IconUser from '../../assets/icon-components/IconUser.jsx';
 
 export default function Account() {
     const auth = useAuth();
@@ -22,7 +23,7 @@ export default function Account() {
         }
     };
 
-    const form = useForm({
+    const passwordForm = useForm({
         mode: 'uncontrolled',
         initialValues: {
             currentPassword: '',
@@ -38,13 +39,40 @@ export default function Account() {
         },
     });
 
+    const usernameForm = useForm({
+        mode: 'uncontrolled',
+        initialValues: {
+            username: auth.user.username,
+        },
+        validateInputOnChange: true,
+
+        validate: {
+            newUsername: (value) => !value ? 'New username is required' : value === auth.user.username ? 'New username cannot be the same as the old one' : null,
+        },
+    });
+
     return (
         <Box maw={340} mx="auto">
             <Title order={1} align='center'>Account Settings</Title>
+            {true && (<form
+                
+            >
+                <Title order={3} align='center' mt='xl'>Change Username</Title>
+                <TextInput 
+                    variant='filled' 
+                    mt='md'
+                    label='New username'
+                    placeholder='New username'
+                    leftSection={<IconUser />}
+                    key={usernameForm.key('newUsername')}
+                    {...usernameForm.getInputProps('newUsername')}
+                >
+                </TextInput>
+            </form>)}
             <form
-                onSubmit={form.onSubmit(async (values) => {
+                onSubmit={passwordForm.onSubmit(async (values) => {
                     if (await updateUserPassword(values)) {
-                        form.reset(); // Clear the form
+                        passwordForm.reset(); // Clear the form
                     }
                 })}
             >
@@ -56,8 +84,8 @@ export default function Account() {
                     mt="md"
                     label="Current password"
                     placeholder="Current password"
-                    key={form.key('currentPassword')}
-                    {...form.getInputProps('currentPassword')}
+                    key={passwordForm.key('currentPassword')}
+                    {...passwordForm.getInputProps('currentPassword')}
                 />
 
                 <PasswordInputWithStrength
@@ -65,8 +93,8 @@ export default function Account() {
                     label="New password"
                     placeholder="New password"
                     description='Strength meter is just a suggestion.'
-                    key={form.key('newPassword')}
-                    {...form.getInputProps('newPassword')}
+                    key={passwordForm.key('newPassword')}
+                    {...passwordForm.getInputProps('newPassword')}
                 />
 
                 <PasswordInput
@@ -74,13 +102,13 @@ export default function Account() {
                     mt="sm"
                     label="Confirm new password"
                     placeholder="Confirm new password"
-                    key={form.key('confirmPassword')}
-                    {...form.getInputProps('confirmPassword')}
+                    key={passwordForm.key('confirmPassword')}
+                    {...passwordForm.getInputProps('confirmPassword')}
                 />
 
                 <Group justify="flex-end" mt="md">
                     <Button type="submit"
-                        disabled={!form.isValid()}
+                        disabled={!passwordForm.isValid()}
                     >
                         Submit
                     </Button>
