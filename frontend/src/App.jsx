@@ -12,6 +12,7 @@ import Account from './pages/account-settings/Account.jsx';
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css';
 import Logout from './pages/logout/Logout.jsx';
+import UserManagement from './pages/user-management/UserManagement.jsx';
 
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
                             <Route path="/ex" element={<h1>You&apos;ve logged in!!!</h1>} />
                             <Route path="/account" element={<Account />} />
                             <Route path="/logout" element={<Logout />} />
+                            <Route path="/user-management" element={auth.user?.isAdmin ? <UserManagement /> : <Navigate to="/ex" />} />
                         </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
