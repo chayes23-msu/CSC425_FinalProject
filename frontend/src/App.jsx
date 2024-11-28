@@ -16,13 +16,15 @@ import Logout from './pages/logout/Logout.jsx';
 
 export default function App() {
     const auth = useAuth();
+
+    // Theme object for mantine components. Change this to change the look of the page.
     const theme = createTheme({
 
     });
 
     return (
-        <MantineProvider theme={theme}>
-            <Notifications autoClose={6000}/>
+        <MantineProvider theme={theme} defaultColorScheme='dark'> {/* MantineProvider is a wrapper for the app that provides the theme to all the components */}
+            <Notifications autoClose={6000}/> {/* Notifications component from mantine...Notifications auto close after 6 secs */}
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={

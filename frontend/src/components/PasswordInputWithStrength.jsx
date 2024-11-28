@@ -3,6 +3,9 @@ import IconCheck from '../assets/icon-components/IconCheck';
 import IconX from '../assets/icon-components/IconX';
 import { PasswordInput, Progress, Text, Popover, Box, rem } from '@mantine/core';
 
+// This component is a password input box that has a strength meter popover that shows the user how strong their password is
+// The code was found at https://mantine.dev/core/https://mantine.dev/core/password-input/
+
 function PasswordRequirement({ meets, label }) {
     return (
         <Text

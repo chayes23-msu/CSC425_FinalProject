@@ -12,6 +12,7 @@ import { useState } from 'react';
 //  A user can change their password here, an admin can change their password and username
 export default function Account() {
     const auth = useAuth();
+    
     // usernameUpdated is used to disable the username input after one successful username update
     // This is to prevent the user from changing their username multiple times in a row without reloading the page.
     // This is needed because the form does not update the usernames initial value and validation rule without reloding, so to avoid problems, 

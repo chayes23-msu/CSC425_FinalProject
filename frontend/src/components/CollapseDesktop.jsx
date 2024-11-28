@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import IconLogout from '../assets/icon-components/IconLogout';
 
 // This component is a wrapper for the protected routes that adds a nav bar with a header
+// The code was found at https://mantine.dev/core/app-shell/ 
 // Icons from https://tabler.io/icons 
 
 
