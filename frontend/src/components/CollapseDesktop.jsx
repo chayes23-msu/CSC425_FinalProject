@@ -4,6 +4,7 @@ import { MantineLogo } from '@mantinex/mantine-logo';
 import { Outlet } from 'react-router-dom';
 import IconUser from '../assets/icon-components/IconUser';
 import { useNavigate } from 'react-router-dom';
+import IconLogout from '../assets/icon-components/IconLogout';
 
 // This component is a wrapper for the protected routes that adds a nav bar with a header
 // Icons from https://tabler.io/icons 
@@ -23,7 +24,7 @@ export function CollapseDesktop({ children }) {
     }
     const navLinks = [
         new navLink("Account", "/account", <IconUser size="1rem" stroke={1.5} />),
-        //new navLink(...)
+        new navLink("Logout", "/logout", <IconLogout size="1rem" stroke={1.5} />),
     ];
 
     const handleNavLinkClick = (route) => {

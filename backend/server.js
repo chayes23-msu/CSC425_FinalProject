@@ -399,8 +399,8 @@ app.post("/users", async (req, res) => {
     }
 });
 
-// Update a user (only password field can be updated) (for use by non-admin users)
-app.put("/users/:userID", async (req, res) => {
+// Update a user password (for use by non-admin and admin users)
+app.put("/users/password/:userID", async (req, res) => {
     const { password, currentPassword } = req.body;
 
     if(!password || !currentPassword) {
@@ -424,6 +424,33 @@ app.put("/users/:userID", async (req, res) => {
         res.status(500).send("Error updating password");
     }
 });
+
+// Update a users username (for use by admin only users)
+app.put("/users/username/:userID", async (req, res) => {
+    const { username, currentPassword } = req.body;
+
+    if(!username || !currentPassword) 
+        return res.status(400).send("New username and current password required.");
+
+    const user = await getQuery("getUserByID", { userID: req.params.userID });
+    if(!user.isAdmin) 
+        return res.status(403).send("You do not have permission to update a username.");
+    
+    const passwordMatch = await verifyPassword(currentPassword, user.password);
+    if (!passwordMatch) 
+        return res.status(401).send("Current password input is incorrect.");
+
+    try {
+        await runQuery("updateUsername", {
+            userID: req.params.userID,
+            username: username,
+        });
+        res.status(204).send("Username updated");
+    } catch {
+        console.error("Error updating username:", error);
+        res.status(500).send("Error updating username");
+    }
+});    
 //#endregion
 
 //#endregion

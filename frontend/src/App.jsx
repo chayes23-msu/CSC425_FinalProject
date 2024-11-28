@@ -11,6 +11,7 @@ import { NotFound } from './pages/not-found/NotFound.jsx';
 import Account from './pages/account-settings/Account.jsx';
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css';
+import Logout from './pages/logout/Logout.jsx';
 
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
                         <Route element={<CollapseDesktop />}>
                             <Route path="/ex" element={<h1>You&apos;ve logged in!!!</h1>} />
                             <Route path="/account" element={<Account />} />
+                            <Route path="/logout" element={<Logout />} />
                         </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
