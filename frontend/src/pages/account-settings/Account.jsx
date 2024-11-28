@@ -12,12 +12,8 @@ import { useState } from 'react';
 //  A user can change their password here, an admin can change their password and username
 export default function Account() {
     const auth = useAuth();
-    
-    // usernameUpdated is used to disable the username input after one successful username update
-    // This is to prevent the user from changing their username multiple times in a row without reloading the page.
-    // This is needed because the form does not update the usernames initial value and validation rule without reloding, so to avoid problems, 
-    // we disable the input after one successful update. Idk how to make this better atm
-    const [usernameUpdated, setUsernameUpdated] = useState(false);   
+
+    let currentUsername = auth.user.username;
 
     /**
      * 
@@ -83,13 +79,13 @@ export default function Account() {
         mode: 'uncontrolled',
         initialValues: {
             currentPassword: '',
-            username: auth.user.username,
+            username: currentUsername,
         },
         validateInputOnChange: true,
 
         validate: {
             currentPassword: (value) => !value ? 'Current password is required' : null,
-            username: (value) => !value ? 'New username is required' : value === auth.user.username ? 'New username cannot be the same as the old one' : null,
+            username: (value) => !value ? 'New username is required' : value === currentUsername ? 'New username cannot be the same as the old one' : null,
         },
     });
 
@@ -100,9 +96,10 @@ export default function Account() {
                 onSubmit={usernameForm.onSubmit(async (values) => {
                     if (await updateUsername(values)) {
                         // login again to update the token with new username
+                        currentUsername = values.username; // set the current username so form will reset properly
                         try {
-                            await auth.login({ username: values.username, password: values.currentPassword });
-                            setUsernameUpdated(true);
+                            await auth.login({ username: values.username, password: values.currentPassword }); // login with new username so token is updated (needed so auth context has correct user info)
+                            usernameForm.setValues({username: currentUsername, currentPassword: ''}); // "reset" form with new values
                         } catch (err) {
                             showErrorNotification(err.response?.data);
                             console.error(err);
@@ -130,11 +127,10 @@ export default function Account() {
                     leftSection={<IconUser />}
                     key={usernameForm.key('username')}
                     {...usernameForm.getInputProps('username')}
-                    disabled={usernameUpdated}
                 >
                 </TextInput>
                 <Group justify='flex-end' mt='md'>
-                    <Button type="submit" disabled={!usernameForm.isValid() || usernameUpdated}>Submit</Button>
+                    <Button type="submit" disabled={!usernameForm.isValid()}>Submit</Button>
                 </Group>
             </form>
             <form
