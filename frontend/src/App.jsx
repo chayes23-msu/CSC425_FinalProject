@@ -8,7 +8,7 @@ import Home from './pages/home/Home.jsx';
 import Login from './pages/login/Login.jsx';
 import { NotFound } from './pages/not-found/NotFound.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
-
+import AnimalDetailsPage from './pages/animal-details/AnimalDetailsPage.jsx';
 
 export default function App() {
     const auth = useAuth();
@@ -33,6 +33,7 @@ export default function App() {
                             <Route path="/home" element={
                                 <Home />
                             } />
+                            <Route path="/animal/:id" element={<AnimalDetailsPage />}></Route>
                         </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
