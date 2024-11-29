@@ -3,6 +3,9 @@ import { Illustration } from './Illustration';
 import classes from './NotFound.module.css';
 import { useNavigate } from 'react-router-dom';
 
+// This page is displayed when the user tries to access a route that doesn't exist.
+// It shows an illustration, a message that the page doesn't exist, and a button to go back to the home page.
+// Code from https://ui.mantine.dev/category/error-pages/
 export function NotFound() {
     const navigate = useNavigate();
     const handleButtonClick = () => {

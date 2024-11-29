@@ -14,12 +14,14 @@ import classes from './Login.module.css';
 import { useAuth } from "../../authentication/AuthProvider";
 import { useState } from "react";
 
+// This is the login page for the app. It was built using code from https://ui.mantine.dev/category/authentication/
 export default function Login() {
     const auth = useAuth();
     const [loginError, setLoginError] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    // Attempt to log in when form is submitted
     async function handleSubmit() {
         if (!username || !password) {
             setLoginError("Username and password are required.");
@@ -39,7 +41,7 @@ export default function Login() {
         }
     }
 
-    // Handle Enter key press to submit form
+    // Enter key handler to submit form
     function handleKeyDown(event) {
         if (event.key === "Enter") {
             if(username && password)

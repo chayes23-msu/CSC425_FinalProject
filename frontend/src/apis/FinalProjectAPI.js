@@ -24,15 +24,19 @@ api.interceptors.request.use(
  * FinalProjectAPI module for API calls.
  */
 export const FinalProjectAPI = {
+    /**
+     * 
+     * @param {string} newToken The new token to set.
+     * @returns {void} This function is used to set the token for the API. 
+     */
     setToken: (newToken) => {
         token = newToken;
-        localStorage.setItem("token", newToken);
     },
 
     /**
      * Logs in a user.
      * @param {{ username: string, password: string }} loginData - The login credentials.
-     * @returns {Promise<object>} Resolves with user data if successful, rejects with an error otherwise.
+     * @returns {Promise<object>} Resolves with user data and token if successful, rejects with an error otherwise.
      */
     login: async function (loginData) {
         try {

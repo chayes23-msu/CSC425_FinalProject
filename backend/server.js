@@ -7,7 +7,7 @@ import { hashPassword, verifyPassword } from "./authentication/hasher.js";
 import {
     authenticateToken,
     generateToken,
-} from "./authentication/tokenGenerator.js";
+} from "./authentication/tokenUtil.js";
 import { allQuery, getQuery, runQuery } from "./database/dbUtils.js";
 
 // ********** Express Server **********
@@ -365,7 +365,7 @@ app.delete("/notebookEntries/:notebookEntryID", async (req, res) => {
 // Get user by username
 app.get("/users/:username", async (req, res) => {
     try {
-        const user = await getQuery("getUser", { username: req.params.username });
+        const user = await getQuery("getUserByName", { username: req.params.username });
 
         if (!user) {
             return res.status(404).send("User not found");
@@ -382,7 +382,8 @@ app.get("/users/:username", async (req, res) => {
 app.post("/users", async (req, res) => {
     const { username, password } = req.body;
 
-    if (getQuery("getUser", req.username).isAdmin == false) {
+    // Check if user is an admin (authenticateToken attaches username from the token to the request object)
+    if (await getQuery("getUserByName", req.username).isAdmin == false) {
         return res.status(403).send("You do not have permission to create a user.");
     }
 
@@ -403,6 +404,59 @@ app.post("/users", async (req, res) => {
         res.status(500).send("Error creating user");
     }
 });
+
+// Update a user password (for use by non-admin and admin users)
+app.put("/users/password/:userID", async (req, res) => {
+    const { password, currentPassword } = req.body;
+
+    if(!password || !currentPassword) {
+        return res.status(400).send("Old and current passwords required.");
+    }
+
+    const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
+    if (!passwordMatch) {
+        return res.status(401).send("Current password input is incorrect.");
+    }
+
+    try {
+        const hashedPassword = await hashPassword(password);
+        await runQuery("updateUserPassword", {
+            userID: req.params.userID,
+            password: hashedPassword,
+        });
+        res.status(204).send("Password updated");
+    } catch (error) {
+        console.error("Error updating password:", error);
+        res.status(500).send("Error updating password");
+    }
+});
+
+// Update a users username (for use by admin only users)
+app.put("/users/username/:userID", async (req, res) => {
+    const { username, currentPassword } = req.body;
+
+    if(!username || !currentPassword) 
+        return res.status(400).send("New username and current password required.");
+
+    const user = await getQuery("getUserByID", { userID: req.params.userID });
+    if(!user.isAdmin) 
+        return res.status(403).send("You do not have permission to update a username.");
+    
+    const passwordMatch = await verifyPassword(currentPassword, user.password);
+    if (!passwordMatch) 
+        return res.status(401).send("Current password input is incorrect.");
+
+    try {
+        await runQuery("updateUsername", {
+            userID: req.params.userID,
+            username: username,
+        });
+        res.status(204).send("Username updated");
+    } catch {
+        console.error("Error updating username:", error);
+        res.status(500).send("Error updating username");
+    }
+});    
 //#endregion
 
 //#endregion
@@ -421,7 +475,7 @@ app.post("/login", async (req, res) => {
     }
 
     try {
-        const user = await getQuery("getUser", { username: username });
+        const user = await getQuery("getUserByName", { username: username });
         if (!user) {
             return res.status(401).send("Invalid username or password");
         }
@@ -429,9 +483,11 @@ app.post("/login", async (req, res) => {
         if (!passwordMatch) {
             return res.status(401).send("Invalid username or password");
         } else {
-            const token = generateToken(username);
+            delete user.password;
+            const token = generateToken(user); // Generate token with the user payload
             console.log("User logged in");
-            return res.status(200).json({ "token": token, "user": {"username": username, "isAdmin": user.isAdmin, "userID": user.userID} });
+            // Send the user in the response (the user object is the same as the one in the payload of the token)
+            return res.status(200).json({ "token": token, "user": user });
         }
     } catch (error) {
         console.error("Error logging in:", error);
