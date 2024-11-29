@@ -132,4 +132,20 @@ export const FinalProjectAPI = {
             return Promise.reject(err);
         }
     },
+
+    /**
+     * Gets all users from the database
+     * @returns {Promise<object>} Resolves with an array of users if successful, rejects with an error otherwise.
+     */
+    getUsers: async function () {
+        try {
+            const response = await api.request({
+                url: '/users',
+                method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
 };

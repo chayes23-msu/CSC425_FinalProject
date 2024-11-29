@@ -356,6 +356,17 @@ app.delete("/notebookEntries/:notebookEntryID", async (req, res) => {
 //#endregion
 
 //#region Users
+// Get all users
+app.get("/users", async (req, res) => {
+    try {
+        const users = await allQuery("getUsers", {});
+        res.json(users);
+    } catch (error) {
+        console.error("Error getting users:", error);
+        res.status(500).send("Error getting users");
+    }
+});
+
 // Get user by username
 app.get("/users/:username", async (req, res) => {
     try {

@@ -1,0 +1,1 @@
+SELECT userID, username, isAdmin, createdAt FROM Users;
