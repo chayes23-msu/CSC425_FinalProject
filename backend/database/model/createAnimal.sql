@@ -1,5 +1,5 @@
 INSERT INTO Animals 
-    (
+(
     colorID,
     motherID,
     fatherID,
@@ -9,23 +9,21 @@ INSERT INTO Animals
     tagNumber,
     currentWeight,
     breedComposition,
-    tagNumber,
     dateOfSale,
     pricePerPound,
-    totalPrice,
-    )
-    VALUES (
-        $colorID,
-        $motherID,
-        $fatherID,
-        $birthDate,
-        $name,
-        $type,
-        $tagNumber,
-        $currentWeight,
-        $breedComposition,
-        $tagNumber,
-        $dateOfSale,
-        $pricePerPound,
-        $totalPrice,
-    );
+    totalPrice
+)
+VALUES (
+    $colorID,
+    $motherID,
+    $fatherID,
+    $birthDate,
+    $name,
+    $type,
+    $tagNumber,
+    $currentWeight,
+    $breedComposition,
+    $dateOfSale,
+    $pricePerPound,
+    $totalPrice
+);

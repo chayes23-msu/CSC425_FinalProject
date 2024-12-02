@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS Breeds (
     breed TEXT NOT NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS Animals (
     animalID INTEGER PRIMARY KEY AUTOINCREMENT,
     colorID INTEGER DEFAULT NULL,
@@ -31,7 +32,6 @@ CREATE TABLE IF NOT EXISTS Animals (
     currentWeight INTEGER,
     tagNumber INTEGER NOT NULL,
     breedComposition TEXT NOT NULL,
-    tagNumber INTEGER,
     dateOfSale DATETIME,
     pricePerPound NUMERIC,
     totalPrice NUMERIC,

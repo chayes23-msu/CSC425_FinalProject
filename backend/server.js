@@ -175,9 +175,9 @@ app.post("/animals", async (req, res) => {
         breedComposition,
         fatherID,
         motherID,
-        tagNumber,
         colorID,
         currentWeight,
+        tagNumber,
         dateOfSale,
         pricePerPound,
         totalPrice,
@@ -191,7 +191,6 @@ app.post("/animals", async (req, res) => {
         !breedComposition ||
         !fatherID ||
         !motherID ||
-        !tagNumber ||
         !colorID ||
         !currentWeight ||
         !tagNumber ||
@@ -211,7 +210,6 @@ app.post("/animals", async (req, res) => {
             fatherID: fatherID,
             motherID: motherID,
             colorID: colorID,
-            tagNumber: tagNumber,
             currentWeight: currentWeight,
             tagNumber: tagNumber,
             dateOfSale: dateOfSale,
@@ -221,10 +219,10 @@ app.post("/animals", async (req, res) => {
         res.status(201).send("Animal created");
     } catch (error) {
         console.error("Error creating animal:", error);
+        console.error(error);
         res.status(500).send("Error creating animal");
     }
 });
-
 // Get all animals ***NO POSTMAN TEST***
 app.get("/animals", async (req, res) => {
     try {

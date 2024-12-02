@@ -80,8 +80,12 @@ function TableSort() {
     breedComposition: '',
     fatherID: '',
     motherID: '',
+    tagNumber: '',
     colorID: '',
     currentWeight: '',
+    dateOfSale: '',
+    pricePerPound: '',
+    totalPrice: '',
   });
 
   const fetchAnimals = async () => {
@@ -145,9 +149,19 @@ function TableSort() {
     setNewAnimal({ ...newAnimal, birthDate: date });
   };
 
+  const handleSaleDateChange = (date) => {
+    setNewAnimal({ ...newAnimal, dateOfSale: date });
+  };
+
   const handleSave = async () => {
     try {
-      await FinalProjectAPI.createAnimal(newAnimal);
+      const formattedAnimal = {
+        ...newAnimal,
+        birthDate: newAnimal.birthDate ? newAnimal.birthDate.toISOString().split('T')[0] : '', // Format the birthDate to YYYY-MM-DD
+        dateOfSale: newAnimal.dateOfSale ? newAnimal.dateOfSale.toISOString().split('T')[0] : '', // Format the dateOfSale to YYYY-MM-DD
+      };
+      console.log("Creating animal with data:", formattedAnimal); // Log the data being sent
+      await FinalProjectAPI.createAnimal(formattedAnimal);
       close();
       // Refetch the animals to update the table
       fetchAnimals();
@@ -162,7 +176,7 @@ function TableSort() {
     <Table.Tr key={row.animalID} className={classes.tableRow}>
       <Table.Td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
         <button 
-          onClick={() => navigate(`/animal/${row.animalID}`)}
+          onClick={() => console.log(`Cow icon clicked for animal ID: ${row.animalID}`)} 
           style={{
             background: 'none',
             border: 'none',
@@ -174,7 +188,12 @@ function TableSort() {
         >
           <IconCow style={{ width: '24px', height: '24px', display: 'block' }} />
         </button>
-      </Table.Td><Table.Td>{row.name}</Table.Td><Table.Td>{row.type}</Table.Td><Table.Td>{row.birthDate}</Table.Td><Table.Td>{row.breedComposition}</Table.Td><Table.Td>{row.fatherID}</Table.Td><Table.Td>{row.motherID}</Table.Td><Table.Td>{row.colorID}</Table.Td><Table.Td>{row.currentWeight}</Table.Td><Table.Td>
+      </Table.Td>
+      <Table.Td>{row.tagNumber}</Table.Td>
+      <Table.Td>{row.name}</Table.Td>
+      <Table.Td>{row.currentWeight}</Table.Td>
+      <Table.Td>{row.dateOfSale}</Table.Td>
+      <Table.Td>
         <CloseButton className={classes.closeButton} onClick={() => handleDelete(row.animalID)} />
       </Table.Td>
     </Table.Tr>
@@ -243,6 +262,13 @@ function TableSort() {
           mb="sm"
         />
         <TextInput
+          label="Tag Number"
+          name="tagNumber"
+          value={newAnimal.tagNumber}
+          onChange={handleInputChange}
+          mb="sm"
+        />
+        <TextInput
           label="Color ID"
           name="colorID"
           value={newAnimal.colorID}
@@ -253,6 +279,30 @@ function TableSort() {
           label="Current Weight"
           name="currentWeight"
           value={newAnimal.currentWeight}
+          onChange={handleInputChange}
+          mb="sm"
+        />
+        <DatePickerInput
+          label="Date of Sale"
+          name="dateOfSale"
+          value={newAnimal.dateOfSale}
+          onChange={handleSaleDateChange}
+          size="sm" // Adjust size to fit better in the drawer
+          mb="sm"
+          dropdownType='modal'
+          valueFormat='YYYY-MM-DD'
+        />
+        <TextInput
+          label="Price Per Pound"
+          name="pricePerPound"
+          value={newAnimal.pricePerPound}
+          onChange={handleInputChange}
+          mb="sm"
+        />
+        <TextInput
+          label="Total Price"
+          name="totalPrice"
+          value={newAnimal.totalPrice}
           onChange={handleInputChange}
           mb="sm"
         />
@@ -271,6 +321,13 @@ function TableSort() {
           <Table.Tr>
             <Table.Th></Table.Th> {/* Empty header cell for the cow icon */}
             <Th
+              sorted={sortBy === 'tagNumber'}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting('tagNumber')}
+            >
+              Tag Number
+            </Th>
+            <Th
               sorted={sortBy === 'name'}
               reversed={reverseSortDirection}
               onSort={() => setSorting('name')}
@@ -278,53 +335,18 @@ function TableSort() {
               Name
             </Th>
             <Th
-              sorted={sortBy === 'type'}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting('type')}
-            >
-              Type
-            </Th>
-            <Th
-              sorted={sortBy === 'birthDate'}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting('birthDate')}
-            >
-              Birth Date
-            </Th>
-            <Th
-              sorted={sortBy === 'breedComposition'}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting('breedComposition')}
-            >
-              Breed Composition
-            </Th>
-            <Th
-              sorted={sortBy === 'fatherID'}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting('fatherID')}
-            >
-              Father ID
-            </Th>
-            <Th
-              sorted={sortBy === 'motherID'}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting('motherID')}
-            >
-              Mother ID
-            </Th>
-            <Th
-              sorted={sortBy === 'colorID'}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting('colorID')}
-            >
-              Color ID
-            </Th>
-            <Th
               sorted={sortBy === 'currentWeight'}
               reversed={reverseSortDirection}
               onSort={() => setSorting('currentWeight')}
             >
               Current Weight
+            </Th>
+            <Th
+              sorted={sortBy === 'dateOfSale'}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting('dateOfSale')}
+            >
+              Date of Sale
             </Th>
             <Table.Th></Table.Th> {/* Empty header cell for the delete button */}
           </Table.Tr>

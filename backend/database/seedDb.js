@@ -21,8 +21,8 @@ let breeds = ["Angus", "YN", "BN", "Holstein"]
 let animals = [
     {
         colorID: Math.floor(Math.random() * colors.length),
-        motherID: null,
-        fatherID: null,
+        motherID: 1,
+        fatherID: 2,
         birthDate: "2021-01-01",
         name: "Fluffy",
         type: "cow",
