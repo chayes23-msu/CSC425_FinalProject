@@ -7,7 +7,7 @@ import './index.css';
 import Home from './pages/home/Home.jsx';
 import Login from './pages/login/Login.jsx';
 import { NotFound } from './pages/not-found/NotFound.jsx';
-import PrivateRoute from './PrivateRoute.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';
 import AnimalDetailsPage from './pages/animal-details/AnimalDetailsPage.jsx';import Account from './pages/account-settings/Account.jsx';
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css';

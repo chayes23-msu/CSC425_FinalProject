@@ -284,6 +284,21 @@ app.delete("/animals/:animalID", async (req, res) => {
         res.status(500).send("Error deleting animal");
     }
 });
+
+//get an animal by id
+app.get("/animals/:animalID", async (req, res) => {
+    try {
+        const animal = await allQuery(
+            "getAnimalByID",
+            {animalID: req.params.animalID}
+        );
+        res.json(animal);
+    } catch (error) {
+        console.error("Error getting animals:", error);
+        res.status(500).send("Error getting animals");
+    }
+});
+
 //#endregion
 
 //#region NotebookEntries

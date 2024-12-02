@@ -103,6 +103,18 @@ export const FinalProjectAPI = {
         }
     },
 
+    getAnimalByID: async function (animalID) {
+        try {
+            const response = await api.request({
+                url: `/animals/${animalID}`,
+                method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
     /**
      * Fetches all colors.
      * @returns {Promise<object[]>} Resolves with an array of colors if successful, rejects with an error otherwise.
@@ -117,5 +129,20 @@ export const FinalProjectAPI = {
         } catch (err) {
             return Promise.reject(err);
         }
-    }
+    },
+
+
+
+    // Notebooks API calls go here
+    getNotebookEntries : async function() {
+        try {
+            const response = await api.request({
+                url: '/notebookEntries/:animalID',
+                method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
 };

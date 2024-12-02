@@ -15,6 +15,7 @@ import { DatePickerInput } from '@mantine/dates';
 import '@mantine/dates/styles.css';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FinalProjectAPI } from '../../apis/FinalProjectAPI';
 import classes from './Home.module.css';
 import IconChevronDown from '../../assets/icon-components/IconChevronDown';
@@ -70,6 +71,7 @@ function TableSort() {
   const [sortBy, setSortBy] = useState(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [fetchError, setFetchError] = useState("");
+  const navigate = useNavigate();
   const [drawerOpened, { open, close }] = useDisclosure(false);
   const [newAnimal, setNewAnimal] = useState({
     name: '',
@@ -160,7 +162,7 @@ function TableSort() {
     <Table.Tr key={row.animalID} className={classes.tableRow}>
       <Table.Td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
         <button 
-          onClick={() => console.log(`Cow icon clicked for animal ID: ${row.animalID}`)} 
+          onClick={() => navigate(`/animal/${row.animalID}`)}
           style={{
             background: 'none',
             border: 'none',

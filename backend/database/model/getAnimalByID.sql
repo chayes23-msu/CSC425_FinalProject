@@ -1,0 +1,1 @@
+SELECT * FROM Animals a WHERE animalID = $animalID;
