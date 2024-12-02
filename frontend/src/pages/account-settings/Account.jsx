@@ -28,8 +28,7 @@ export default function Account() {
             console.log('Password updated');
             return true;
         } catch (err) {
-            showErrorNotification(err.response?.data);
-            console.error(err);
+            showErrorNotification(err);
             return false;
         }
     };
@@ -47,8 +46,7 @@ export default function Account() {
             console.log('Username updated');
             return true;
         } catch (err) {
-            showErrorNotification(err.response?.data);
-            console.error(err);
+            showErrorNotification(err);
             return false;
         }
     }
