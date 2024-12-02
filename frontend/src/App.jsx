@@ -13,7 +13,7 @@ import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css';
 import Logout from './pages/logout/Logout.jsx';
 import UserManagement from './pages/user-management/UserManagement.jsx';
-
+import { ModalsProvider } from '@mantine/modals';
 
 export default function App() {
     const auth = useAuth();
@@ -26,6 +26,7 @@ export default function App() {
     return (
         <MantineProvider theme={theme} defaultColorScheme='dark'> {/* MantineProvider is a wrapper for the app that provides the theme to all the components */}
             <Notifications autoClose={6000}/> {/* Notifications component from mantine...Notifications auto close after 6 secs */}
+            <ModalsProvider>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={
@@ -45,6 +46,7 @@ export default function App() {
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
+            </ModalsProvider>
         </MantineProvider>
     );
 }

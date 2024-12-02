@@ -1,9 +1,9 @@
-import { Button, Title, Table, Flex } from "@mantine/core";
+import { Button, Title, Table, Flex, TextInput } from "@mantine/core";
 import { FinalProjectAPI as api } from "../../apis/FinalProjectAPI";
 import { useEffect, useState } from "react";
 import IconBackspace from "../../assets/icon-components/IconBackspace";
 import IconEdit from "../../assets/icon-components/IconEdit";
-// import { modals } from "@mantine/modals"
+import { modals } from "@mantine/modals"
 
 // User management page for creating, deleting, and updating users
 
@@ -43,7 +43,26 @@ export default function UserManagement() {
                         <Table.Tr key={user.userID} fz="lg">
                             <Table.Td>{user.username}</Table.Td>
                             <Table.Td>{user.isAdmin ? "Admin" : "Regular User"}</Table.Td>
-                            <Table.Td><Button variant="subtle"><IconEdit /></Button><Button variant="subtle" color="red"><IconBackspace /></Button></Table.Td>
+                            <Table.Td>
+                                <Button 
+                                    variant="subtle" 
+                                    onClick={() => {
+                                        modals.open({title: `Edit user: ${user.username}`, children: (
+                                        <>
+                                          <TextInput label="Your email" placeholder="Your email" data-autofocus />
+                                          <Button fullWidth onClick={() => modals.closeAll()} mt="md">
+                                            Submit
+                                          </Button>
+                                        </>
+                                      ),
+                                    })}}
+                                >
+                                    <IconEdit />
+                                </Button>
+                                <Button variant="subtle" color="red">
+                                    <IconBackspace />
+                                </Button>
+                            </Table.Td>
                         </Table.Tr>
                     ))}
                 </Table.Tbody>
