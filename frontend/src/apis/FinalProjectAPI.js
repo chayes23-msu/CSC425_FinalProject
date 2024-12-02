@@ -1,4 +1,5 @@
 import axios from "axios";
+import { showErrorNotification } from "../notifications/notificationFunctions";
 
 
 let token = localStorage.getItem("token");
@@ -8,6 +9,7 @@ const api = axios.create({
     baseURL: "https://localhost:5000",
 });
 
+// Add authorization header to requests
 api.interceptors.request.use(
     (config) => {
         if (token) {
@@ -17,6 +19,26 @@ api.interceptors.request.use(
     },
     (error) => {
         return Promise.reject(error);
+    }
+);
+
+// Response interceptor to display error if network error
+api.interceptors.response.use(
+    (response) => {
+        // Pass through successful responses
+        return response;
+    },
+    (error) => {
+        console.error(error);   //log the error
+        if (!error.response) {
+            // Network error or server unreachable
+            // PROBLEM HERE WITH TRYING TO MAKE NEW OBJECT PROPERTY DATA
+            // CONSIDER MOVING ALL ERROR HANDLING TO THIS API LAYER AND ONLY PASSING THE MESSAGE TO COMPONENTS
+            return Promise.reject("Network Error: Check your connection");
+        } else {
+            // Pass through other errors
+            return Promise.reject(error.response.data); // Return the error message
+        }
     }
 );
 

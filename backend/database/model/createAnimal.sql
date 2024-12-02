@@ -8,7 +8,11 @@ INSERT INTO Animals
     type,
     tagNumber,
     currentWeight,
-    breedComposition
+    breedComposition,
+    tagNumber,
+    dateOfSale,
+    pricePerPound,
+    totalPrice,
     )
     VALUES (
         $colorID,
@@ -19,5 +23,9 @@ INSERT INTO Animals
         $type,
         $tagNumber,
         $currentWeight,
-        $breedComposition
+        $breedComposition,
+        $tagNumber,
+        $dateOfSale,
+        $pricePerPound,
+        $totalPrice,
     );

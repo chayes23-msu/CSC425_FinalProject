@@ -178,6 +178,10 @@ app.post("/animals", async (req, res) => {
         tagNumber,
         colorID,
         currentWeight,
+        tagNumber,
+        dateOfSale,
+        pricePerPound,
+        totalPrice,
     } = req.body;
 
     // Input validation
@@ -190,7 +194,11 @@ app.post("/animals", async (req, res) => {
         !motherID ||
         !tagNumber ||
         !colorID ||
-        !currentWeight
+        !currentWeight ||
+        !tagNumber ||
+        !dateOfSale ||
+        !pricePerPound ||
+        !totalPrice
     ) {
         return res.status(400).send("All fields are required.");
     }
@@ -206,6 +214,10 @@ app.post("/animals", async (req, res) => {
             colorID: colorID,
             tagNumber: tagNumber,
             currentWeight: currentWeight,
+            tagNumber: tagNumber,
+            dateOfSale: dateOfSale,
+            pricePerPound: pricePerPound,
+            totalPrice: totalPrice,
         });
         res.status(201).send("Animal created");
     } catch (error) {
@@ -237,6 +249,10 @@ app.put("/animals/:animalID", async (req, res) => {
         tagNumber,
         colorID,
         currentWeight,
+        tagNumber,
+        dateOfSale,
+        pricePerPound,
+        totalPrice,
     } = req.body;
 
     // Input validation
@@ -249,7 +265,11 @@ app.put("/animals/:animalID", async (req, res) => {
         !motherID ||
         !tagNumber ||
         !colorID ||
-        !currentWeight
+        !currentWeight ||
+        !tagNumber ||
+        !dateOfSale ||
+        !pricePerPound ||
+        !totalPrice
     ) {
         return res.status(400).send("All fields are required.");
     }
@@ -265,6 +285,10 @@ app.put("/animals/:animalID", async (req, res) => {
             colorID: colorID,
             tagNumber: tagNumber,
             currentWeight: currentWeight,
+            tagNumber: tagNumber,
+            dateOfSale: dateOfSale,
+            pricePerPound: pricePerPound,
+            totalPrice: totalPrice,
             animalID: req.params.animalID,
         });
         res.status(204).send("Animal updated");
