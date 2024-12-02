@@ -4,13 +4,15 @@ import { FinalProjectAPI } from '../../apis/FinalProjectAPI';
 
 function AnimalDetailsPage() {
   const { id } = useParams(); // Extract the ID from the URL
-  const [animal, setAnimal] = useState(null);
+  const [animal, setAnimal] = useState([]);
   const [fetchError, setFetchError] = useState("");
+  const [animalEntries, setAnimalEntries] = useState([]);
 
   useEffect(() => {
     const fetchAnimalDetails = async () => {
       try {
         const data = await FinalProjectAPI.getAnimalByID(id); // Fetch details using the ID
+        console.log(data);
         setAnimal(data);
       } catch (err) {
         const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";

@@ -176,7 +176,7 @@ function TableSort() {
     <Table.Tr key={row.animalID} className={classes.tableRow}>
       <Table.Td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
         <button 
-          onClick={() => console.log(`Cow icon clicked for animal ID: ${row.animalID}`)} 
+          onClick={() => navigate(`/animal/${row.animalID}`)} 
           style={{
             background: 'none',
             border: 'none',
