@@ -1,9 +1,11 @@
-import { Button, Title, Table, Flex, TextInput } from "@mantine/core";
+import { Button, Title, Table, Flex, TextInput, Switch } from "@mantine/core";
 import { FinalProjectAPI as api } from "../../apis/FinalProjectAPI";
 import { useEffect, useState } from "react";
 import IconBackspace from "../../assets/icon-components/IconBackspace";
 import IconEdit from "../../assets/icon-components/IconEdit";
 import { modals } from "@mantine/modals"
+import { useForm } from "@mantine/form";
+import PasswordInputWithStrength from "../../components/PasswordInputWithStrength";
 
 // User management page for creating, deleting, and updating users
 
@@ -26,6 +28,23 @@ export default function UserManagement() {
         console.log("Create a user");
     }
 
+    const editUserForm = useForm({
+        mode: 'uncontrolled',
+        initialValues: {
+            username: '',
+            isAdmin: false,
+            newPassword: '',
+        }
+    });
+
+    const updateUser = async (values) => {
+        try {
+            
+        } catch (err) {
+
+        }
+    }
+
     return (
         <Flex maw="65%" mx="auto" direction="column" justify="center">
             <Title order={1} align='center'>Manage Users</Title>
@@ -44,18 +63,52 @@ export default function UserManagement() {
                             <Table.Td>{user.username}</Table.Td>
                             <Table.Td>{user.isAdmin ? "Admin" : "Regular User"}</Table.Td>
                             <Table.Td>
-                                <Button 
-                                    variant="subtle" 
+                                <Button
+                                    variant="subtle"
                                     onClick={() => {
-                                        modals.open({title: `Edit user: ${user.username}`, children: (
-                                        <>
-                                          <TextInput label="Your email" placeholder="Your email" data-autofocus />
-                                          <Button fullWidth onClick={() => modals.closeAll()} mt="md">
-                                            Submit
-                                          </Button>
-                                        </>
-                                      ),
-                                    })}}
+                                        const userIsAdmin = user.isAdmin === 1;
+                                        editUserForm.setInitialValues({username: user.username, isAdmin: userIsAdmin, newPassword: ''});
+                                        editUserForm.reset();
+                                        modals.open({
+                                            title: `Edit user: ${user.username}`, children: (
+                                                <form
+                                                    onSubmit={editUserForm.onSubmit(async (values) => {
+                                                        if (await updateUser(values)) {
+                                                            modals.close();
+                                                        }
+                                                    })}
+                                                >
+                                                    <TextInput 
+                                                        label="Username" 
+                                                        placeholder="Username"
+                                                        key={editUserForm.key('username')}
+                                                        {...editUserForm.getInputProps('username')}
+                                                    />
+                                                    <PasswordInputWithStrength
+                                                        label=" New password"
+                                                        placeholder="New password"
+                                                        withAsterisk={false}
+                                                        description="Strength meter is just a suggestion"
+                                                        key={editUserForm.key('newPassword')}
+                                                        {...editUserForm.getInputProps('newPassword')}
+                                                    />
+                                                    <Switch
+                                                        label="Administrator"
+                                                        mt="lg"
+                                                        key={editUserForm.key('isAdmin')}
+                                                        {...editUserForm.getInputProps('isAdmin', {type: 'checkbox'})}
+                                                    />
+                                                    <Button
+                                                        fullWidth
+                                                        type="submit"
+                                                        mt="xl"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </form>
+                                            ),
+                                        });
+                                    }}
                                 >
                                     <IconEdit />
                                 </Button>

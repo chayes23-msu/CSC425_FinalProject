@@ -49,6 +49,7 @@ export default function PasswordInputWithStrength({
     placeholder = 'Your password',
     mt = 'sm',
     description = '',
+    withAsterisk = true,
     onChange,
     error
 }) {
@@ -79,7 +80,7 @@ export default function PasswordInputWithStrength({
                 >
                     <PasswordInput
                         mt={mt}
-                        withAsterisk
+                        withAsterisk={withAsterisk}
                         label={label}
                         placeholder={placeholder}
                         description={description}
