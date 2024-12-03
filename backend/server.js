@@ -412,7 +412,7 @@ app.post("/users", async (req, res) => {
     const { username, password } = req.body;
 
     // Check if user is an admin (authenticateToken attaches username from the token to the request object)
-    if (await getQuery("getUserByName", req.username).isAdmin == false) {
+    if (!req.user.isAdmin) {
         return res.status(403).send("You do not have permission to create a user.");
     }
 
@@ -467,8 +467,7 @@ app.put("/users/username/:userID", async (req, res) => {
     if(!username || !currentPassword) 
         return res.status(400).send("New username and current password required.");
 
-    const user = await getQuery("getUserByID", { userID: req.params.userID });
-    if(!user.isAdmin) 
+    if(!req.user.isAdmin) 
         return res.status(403).send("You do not have permission to update a username.");
     
     const passwordMatch = await verifyPassword(currentPassword, user.password);

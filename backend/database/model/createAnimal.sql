@@ -11,7 +11,7 @@ INSERT INTO Animals
     tagNumber,
     dateOfSale,
     pricePerPound,
-    totalPrice,
+    totalPrice
     )
     VALUES (
         $colorID,
@@ -25,5 +25,5 @@ INSERT INTO Animals
         $tagNumber,
         $dateOfSale,
         $pricePerPound,
-        $totalPrice,
+        $totalPrice
     );
