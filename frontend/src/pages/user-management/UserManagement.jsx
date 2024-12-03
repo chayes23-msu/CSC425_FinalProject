@@ -33,7 +33,7 @@ export default function UserManagement() {
         initialValues: {
             username: '',
             isAdmin: false,
-            newPassword: '',
+            password: '',
         }
     });
 
@@ -67,7 +67,7 @@ export default function UserManagement() {
                                     variant="subtle"
                                     onClick={() => {
                                         const userIsAdmin = user.isAdmin === 1;
-                                        editUserForm.setInitialValues({username: user.username, isAdmin: userIsAdmin, newPassword: ''});
+                                        editUserForm.setInitialValues({username: user.username, isAdmin: userIsAdmin, password: ''});
                                         editUserForm.reset();
                                         modals.open({
                                             title: `Edit user: ${user.username}`, children: (
@@ -89,8 +89,8 @@ export default function UserManagement() {
                                                         placeholder="New password"
                                                         withAsterisk={false}
                                                         description="Strength meter is just a suggestion"
-                                                        key={editUserForm.key('newPassword')}
-                                                        {...editUserForm.getInputProps('newPassword')}
+                                                        key={editUserForm.key('password')}
+                                                        {...editUserForm.getInputProps('password')}
                                                     />
                                                     <Switch
                                                         label="Administrator"

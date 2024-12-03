@@ -99,8 +99,7 @@ export default function Account() {
                             await auth.login({ username: values.username, password: values.currentPassword }); // login with new username so token is updated (needed so auth context has correct user info)
                             usernameForm.setValues({username: currentUsername, currentPassword: ''}); // "reset" form with new values
                         } catch (err) {
-                            showErrorNotification(err.response?.data);
-                            console.error(err);
+                            showErrorNotification(err);
                         }
                     }
                 })}
