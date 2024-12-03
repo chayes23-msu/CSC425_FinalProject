@@ -27,7 +27,11 @@ let animals = [
         name: "Fluffy",
         type: "cow",
         currentWeight: 1123,
-        breedComposition: "Holstein"
+        breedComposition: "Holstein",
+        tagNumber: "123",
+        dateOfSale: null,
+        pricePerPound: null,
+        totalPrice: null,
     },
     {
         colorID: Math.floor(Math.random() * colors.length),
@@ -37,7 +41,11 @@ let animals = [
         name: "Bruce",
         type: "bull",
         currentWeight: 2340,
-        breedComposition: "Holstein"
+        breedComposition: "Holstein",
+        tagNumber: 456,
+        dateOfSale: null,
+        pricePerPound: null,
+        totalPrice: null,
     },
     {
         colorID: Math.floor(Math.random() * (colors.length)),
@@ -47,7 +55,11 @@ let animals = [
         name: "Gerald",
         type: "calf",
         currentWeight: 950,
-        breedComposition: "Holstein"
+        breedComposition: "Holstein",
+        tagNumber: 789,
+        dateOfSale: null,
+        pricePerPound: null,
+        totalPrice: null,
     },
 ];
 let notebookEntries = [

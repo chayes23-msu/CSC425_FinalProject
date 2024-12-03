@@ -7,5 +7,9 @@ SET name = $name,
     motherID = $motherID,
     colorID = $colorID,
     currentWeight = $currentWeight
+    tagNumber = $tagNumber,
+    dateOfSale = $dateOfSale,
+    pricePerPound = $pricePerPound,
+    totalPrice = $totalPrice,
 WHERE animalID = $animalID;
 
