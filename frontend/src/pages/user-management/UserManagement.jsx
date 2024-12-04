@@ -1,16 +1,22 @@
-import { Button, Title, Table, Flex, TextInput, Switch } from "@mantine/core";
+import { Text, Button, Title, Table, Flex, TextInput, Switch, Modal, LoadingOverlay } from "@mantine/core";
 import { FinalProjectAPI as api } from "../../apis/FinalProjectAPI";
 import { useEffect, useState } from "react";
 import IconBackspace from "../../assets/icon-components/IconBackspace";
 import IconEdit from "../../assets/icon-components/IconEdit";
-import { modals } from "@mantine/modals"
 import { useForm } from "@mantine/form";
 import PasswordInputWithStrength from "../../components/PasswordInputWithStrength";
+import { useDisclosure } from "@mantine/hooks";
+import { showErrorNotification, showSuccessNotification } from "../../notifications/notificationFunctions";
+import { modals } from "@mantine/modals";
 
 // User management page for creating, deleting, and updating users
 
 export default function UserManagement() {
     const [users, setUsers] = useState([]);
+    const [userToEdit, setUserToEdit] = useState(null);
+    const [editUserModalOpened, editUserModalHandlers] = useDisclosure(false);
+    const [createUserModalOpened, createUserModalHandlers] = useDisclosure(false);
+    const [loading, loadingHandlers] = useDisclosure(false);
 
     useEffect(() => {
         async function fetchUsers() {
@@ -18,14 +24,33 @@ export default function UserManagement() {
                 const fetchedUsers = await api.getUsers();
                 setUsers(fetchedUsers);
             } catch (err) {
-                console.error(err);
+                showErrorNotification(err);
             }
         }
         fetchUsers();
     }, []);
 
+    const updateUser = async (values) => {
+        try {
+            loadingHandlers.open();
+            await api.updateUser(userToEdit.userID, { username: values.username, password: values.password, isAdmin: values.isAdmin });
+            showSuccessNotification("User updated successfully");
+            setUsers(users.map((user) => user.userID === userToEdit.userID ? { ...user, username: values.username, isAdmin: values.isAdmin ? 1:0} : user));
+            return true;
+        } catch (err) {
+            showErrorNotification(err);
+            return false;
+        }
+    }
+
     const createAUser = () => {
+        loadingHandlers.open();
         console.log("Create a user");
+        // *** NEED TO: create a user & update users state
+    }
+
+    const deleteUser = (userID) => {
+        
     }
 
     const editUserForm = useForm({
@@ -34,21 +59,114 @@ export default function UserManagement() {
             username: '',
             isAdmin: false,
             password: '',
+        },
+        validateInputOnChange: true,
+        validate: {
+            username: (value) => !value ? 'Username is required' : null,
         }
     });
 
-    const updateUser = async (values) => {
-        try {
-            
-        } catch (err) {
-
+    const createUserForm = useForm({
+        mode: 'uncontrolled',
+        initialValues: {
+            username: '',
+            isAdmin: false,
+            password: '',
+        },
+        validateInputOnChange: true,
+        validate: {
+            username: (value) => !value ? 'Username is required' : null,
+            password: (value) => !value ? 'Password is required' : null,
         }
-    }
+    });
 
     return (
         <Flex maw="65%" mx="auto" direction="column" justify="center">
+            <Modal title="Edit user" opened={editUserModalOpened} onClose={() => {editUserModalHandlers.close();setUserToEdit(null)}}>
+                <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                <form
+                    onSubmit={editUserForm.onSubmit(async (values) => {
+                        console.log(values);
+                        if (await updateUser(values)) {
+                            editUserModalHandlers.close();
+                            loadingHandlers.close();
+                            setUserToEdit(null);
+                        }
+                    })}
+                >
+                    <TextInput
+                        label="Username"
+                        placeholder="Username"
+                        key={editUserForm.key('username')}
+                        {...editUserForm.getInputProps('username')}
+                    />
+                    <PasswordInputWithStrength
+                        label=" New password"
+                        placeholder="New password"
+                        withAsterisk={false}
+                        description="Strength meter is just a suggestion"
+                        key={editUserForm.key('password')}
+                        {...editUserForm.getInputProps('password')}
+                    />
+                    <Switch
+                        label="Administrator"
+                        mt="lg"
+                        key={editUserForm.key('isAdmin')}
+                        {...editUserForm.getInputProps('isAdmin', { type: 'checkbox' })}
+                    />
+                    <Button
+                        fullWidth
+                        type="submit"
+                        mt="xl"
+                        disabled={!editUserForm.isValid() || !editUserForm.isDirty()}
+                    >
+                        Submit
+                    </Button>
+                </form>
+            </Modal>
+            <Modal title="Create user" opened={createUserModalOpened} onClose={() => {createUserModalHandlers.close()}}>
+                <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                <form
+                    onSubmit={createUserForm.onSubmit(async (values) => {
+                        console.log(values);
+                        if (true /*Create user*/) {
+                            createUserModalHandlers.close();
+                            loadingHandlers.close();
+                        }
+                    })}
+                >
+                    <TextInput
+                        label="Username"
+                        placeholder="Username"
+                        key={createUserForm.key('username')}
+                        {...createUserForm.getInputProps('username')}
+                    />
+                    <PasswordInputWithStrength
+                        label="Password"
+                        placeholder="Password"
+                        withAsterisk={false}
+                        description="Strength meter is just a suggestion"
+                        key={createUserForm.key('password')}
+                        {...createUserForm.getInputProps('password')}
+                    />
+                    <Switch
+                        label="Administrator"
+                        mt="lg"
+                        key={createUserForm.key('isAdmin')}
+                        {...createUserForm.getInputProps('isAdmin', { type: 'checkbox' })}
+                    />
+                    <Button
+                        fullWidth
+                        type="submit"
+                        mt="xl"
+                        disabled={!createUserForm.isValid() || !createUserForm.isDirty()}
+                    >
+                        Submit
+                    </Button>
+                </form>
+            </Modal>
             <Title order={1} align='center'>Manage Users</Title>
-            <Button mt="lg" fz="lg" onClick={createAUser}>Create a User</Button>
+            <Button mt="lg" fz="lg" onClick={() => { createUserForm.reset();createUserModalHandlers.open();}}>Create a User</Button>
             <Table highlightOnHover stickyHeader mt="lg" ta="center">
                 <Table.Thead>
                     <Table.Tr fz='h3'>
@@ -66,53 +184,30 @@ export default function UserManagement() {
                                 <Button
                                     variant="subtle"
                                     onClick={() => {
+                                        setUserToEdit(user);
                                         const userIsAdmin = user.isAdmin === 1;
-                                        editUserForm.setInitialValues({username: user.username, isAdmin: userIsAdmin, password: ''});
+                                        editUserForm.setInitialValues({ username: user.username, isAdmin: userIsAdmin, password: '' });
                                         editUserForm.reset();
-                                        modals.open({
-                                            title: `Edit user: ${user.username}`, children: (
-                                                <form
-                                                    onSubmit={editUserForm.onSubmit(async (values) => {
-                                                        if (await updateUser(values)) {
-                                                            modals.close();
-                                                        }
-                                                    })}
-                                                >
-                                                    <TextInput 
-                                                        label="Username" 
-                                                        placeholder="Username"
-                                                        key={editUserForm.key('username')}
-                                                        {...editUserForm.getInputProps('username')}
-                                                    />
-                                                    <PasswordInputWithStrength
-                                                        label=" New password"
-                                                        placeholder="New password"
-                                                        withAsterisk={false}
-                                                        description="Strength meter is just a suggestion"
-                                                        key={editUserForm.key('password')}
-                                                        {...editUserForm.getInputProps('password')}
-                                                    />
-                                                    <Switch
-                                                        label="Administrator"
-                                                        mt="lg"
-                                                        key={editUserForm.key('isAdmin')}
-                                                        {...editUserForm.getInputProps('isAdmin', {type: 'checkbox'})}
-                                                    />
-                                                    <Button
-                                                        fullWidth
-                                                        type="submit"
-                                                        mt="xl"
-                                                    >
-                                                        Submit
-                                                    </Button>
-                                                </form>
-                                            ),
-                                        });
+                                        editUserModalHandlers.open();
                                     }}
                                 >
                                     <IconEdit />
                                 </Button>
-                                <Button variant="subtle" color="red">
+                                <Button variant="subtle" color="red" onClick={() => {
+                                    modals.openConfirmModal({
+                                        title: 'Delete user',
+                                        centered: true,
+                                        children: (
+                                            <Text>
+                                                Are you sure you want to delete user {user.username}? This is an irreversible action.
+                                            </Text>
+                                        ),
+                                        labels: {confirm: 'Delete', cancel: 'Cancel'},
+                                        confirmProps: {color: 'red'},
+                                        onConfirm: () => console.log(`Delete user ${user.username}`),
+                                    })
+                                    // *** NEED TO: delete user in onConfirm
+                                }}>
                                     <IconBackspace />
                                 </Button>
                             </Table.Td>

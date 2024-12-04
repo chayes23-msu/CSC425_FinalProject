@@ -86,6 +86,25 @@ export const FinalProjectAPI = {
             return Promise.reject(err);
         }
     },
+    
+    /**
+     * 
+     * @param {int} userID 
+     * @param {{username: string, password: string, isAdmin: boolean}} userData Object with new user data. Password can be null to keep the same password. 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    updateUser: async function (userID, userData) {
+        try {
+            const response = await api.request({
+                url: `/users/${userID}`,
+                method: "PUT",
+                data: userData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
 
     /**
      * 
@@ -157,7 +176,7 @@ export const FinalProjectAPI = {
 
     /**
      * Gets all users from the database
-     * @returns {Promise<object>} Resolves with an array of users if successful, rejects with an error otherwise.
+     * @returns {Promise<object>} Resolves with an array of users {username: string, isAdmin: int(0 or 1), userID: int} if successful, rejects with an error otherwise.
      */
     getUsers: async function () {
         try {

@@ -484,7 +484,32 @@ app.put("/users/username/:userID", async (req, res) => {
         console.error("Error updating username:", error);
         res.status(500).send("Error updating username");
     }
-});    
+}); 
+
+// Update a user (for use by admin only users)
+app.put("/users/:userID", async (req, res) => {
+    const { username, password, isAdmin } = req.body;
+
+    if(!username || password === undefined || isAdmin === undefined || isAdmin === null) 
+        return res.status(400).send("All fields (username, password, isAdmin) are required.");
+
+    if(!req.user.isAdmin) 
+        return res.status(403).send("You do not have permission to update a user.");
+
+    try {
+        const hashedPassword = await hashPassword(password);
+        await runQuery("updateUser", {
+            userID: req.params.userID,
+            username: username,
+            password: hashedPassword,
+            isAdmin: isAdmin ? 1 : 0,
+        });
+        res.status(204).send("User updated");
+    } catch {
+        console.error("Error updating user:", error);
+        res.status(500).send("Error updating user");
+    }
+});
 //#endregion
 
 //#endregion
