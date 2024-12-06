@@ -1,1 +1,1 @@
-INSERT INTO USERS (username, password) VALUES ($username, $password);
+INSERT INTO USERS (username, password, isAdmin) VALUES ($username, $password, $isAdmin);

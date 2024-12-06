@@ -5,6 +5,8 @@ import { Outlet } from 'react-router-dom';
 import IconUser from '../assets/icon-components/IconUser';
 import { useNavigate } from 'react-router-dom';
 import IconLogout from '../assets/icon-components/IconLogout';
+import { useAuth } from '../authentication/AuthProvider';
+import IconUsers from '../assets/icon-components/IconUsers';
 
 // This component is a wrapper for the protected routes that adds a nav bar with a header
 // The code was found at https://mantine.dev/core/app-shell/ 
@@ -13,6 +15,7 @@ import IconLogout from '../assets/icon-components/IconLogout';
 
 export function CollapseDesktop({ children }) {
     const navigate = useNavigate();
+    const auth = useAuth();
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
@@ -25,7 +28,7 @@ export function CollapseDesktop({ children }) {
     }
     const navLinks = [
         new navLink("Account", "/account", <IconUser size="1rem" stroke={1.5} />),
-        new navLink("Logout", "/logout", <IconLogout size="1rem" stroke={1.5} />),
+        // add more navLinks here
     ];
 
     const handleNavLinkClick = (route) => {
@@ -51,6 +54,13 @@ export function CollapseDesktop({ children }) {
             </AppShell.Header>
             <AppShell.Navbar p="md">
                 Navigation
+                {!!auth.user.isAdmin && <NavLink 
+                        component="button"
+                        key="User Management"
+                        label="User Management"
+                        leftSection={<IconUsers size="1rem" stroke={1.5} />}
+                        onClick={() => handleNavLinkClick("/user-management")}
+                    />}
                 {navLinks.map((navLink) => {
                     return <NavLink 
                         component="button"
@@ -60,6 +70,14 @@ export function CollapseDesktop({ children }) {
                         onClick={() => handleNavLinkClick(navLink.route)}
                     />
                 })}
+                {<NavLink
+                    component="button"
+                    key="Logout"
+                    label="Logout"
+                    rightSection={<IconLogout size="1rem" stroke={1.5} />}
+                    onClick={() => handleNavLinkClick("/logout")}
+                    />
+                }
             </AppShell.Navbar>
             <AppShell.Main>
                 <Outlet />

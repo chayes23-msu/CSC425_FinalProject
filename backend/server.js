@@ -397,6 +397,17 @@ app.delete("/notebookEntries/:notebookEntryID", async (req, res) => {
 //#endregion
 
 //#region Users
+// Get all users
+app.get("/users", async (req, res) => {
+    try {
+        const users = await allQuery("getUsers", {});
+        res.json(users);
+    } catch (error) {
+        console.error("Error getting users:", error);
+        res.status(500).send("Error getting users");
+    }
+});
+
 // Get user by username
 app.get("/users/:username", async (req, res) => {
     try {
@@ -415,16 +426,16 @@ app.get("/users/:username", async (req, res) => {
 
 // Create a user
 app.post("/users", async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, isAdmin } = req.body;
 
     // Check if user is an admin (authenticateToken attaches username from the token to the request object)
-    if (await getQuery("getUserByName", req.username).isAdmin == false) {
+    if (!req.user.isAdmin) {
         return res.status(403).send("You do not have permission to create a user.");
     }
 
     // Input validation
-    if (!username || !password) {
-        return res.status(400).send("Username and password are required.");
+    if (!username || !password || isAdmin === undefined || isAdmin === null) {
+        return res.status(400).send("Username, password, and isAdmin are required.");
     }
 
     try {
@@ -432,6 +443,7 @@ app.post("/users", async (req, res) => {
         await runQuery("createUser", {
             username: username,
             password: hashedPassword,
+            isAdmin: isAdmin ? 1 : 0,
         });
         res.status(201).send("User created");
     } catch (error) {
@@ -473,8 +485,7 @@ app.put("/users/username/:userID", async (req, res) => {
     if(!username || !currentPassword) 
         return res.status(400).send("New username and current password required.");
 
-    const user = await getQuery("getUserByID", { userID: req.params.userID });
-    if(!user.isAdmin) 
+    if(!req.user.isAdmin) 
         return res.status(403).send("You do not have permission to update a username.");
     
     const passwordMatch = await verifyPassword(currentPassword, user.password);
@@ -487,11 +498,54 @@ app.put("/users/username/:userID", async (req, res) => {
             username: username,
         });
         res.status(204).send("Username updated");
-    } catch {
+    } catch (error) {
         console.error("Error updating username:", error);
         res.status(500).send("Error updating username");
     }
-});    
+}); 
+
+// Update a user (for use by admin only users)
+app.put("/users/:userID", async (req, res) => {
+    const { username, password, isAdmin } = req.body;
+
+    if(!username || password === undefined || isAdmin === undefined || isAdmin === null) 
+        return res.status(400).send("All fields (username, password, isAdmin) are required.");
+
+    if(!req.user.isAdmin) 
+        return res.status(403).send("You do not have permission to update a user.");
+
+    try {
+        const hashedPassword = await hashPassword(password);
+        await runQuery("updateUser", {
+            userID: req.params.userID,
+            username: username,
+            password: hashedPassword,
+            isAdmin: isAdmin ? 1 : 0,
+        });
+        res.status(204).send("User updated");
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).send("Error updating user");
+    }
+});
+
+// Delete a user (for use by admin only users)
+app.delete("/users/:userID", async (req, res) => {
+    if(!req.user.isAdmin) 
+        return res.status(403).send("You do not have permission to delete a user.");
+
+    try {
+        await runQuery("deleteUser", { userID: req.params.userID });
+        res.status(204).send("User deleted");
+    } catch (error){
+        console.error("Error deleting user:", error);
+        if(error.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
+            res.status(400).send("User has associated data elsewhere and cannot be deleted.");
+        } else {
+            res.status(500).send("Error deleting user");
+        }
+    }
+});
 //#endregion
 
 //#endregion
