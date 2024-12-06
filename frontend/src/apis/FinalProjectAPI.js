@@ -30,9 +30,13 @@ api.interceptors.response.use(
         console.error(error);   //log the error
         if (!error.response) {
             // Network error or server unreachable
-            // PROBLEM HERE WITH TRYING TO MAKE NEW OBJECT PROPERTY DATA
-            // CONSIDER MOVING ALL ERROR HANDLING TO THIS API LAYER AND ONLY PASSING THE MESSAGE TO COMPONENTS
             return Promise.reject("Network Error: Check your connection");
+        } else if(error.response?.status === 404) {
+            // no endpoint found on the backend
+            return Promise.reject("Invalid HTTP request was sent");
+        } else if (!error.response?.data) {
+            // this shouldn't happen but if it does, return a generic error message
+            return Promise.reject("Internal Server Error");
         } else {
             // Pass through other errors
             return Promise.reject(error.response.data); // Return the error message
@@ -80,6 +84,41 @@ export const FinalProjectAPI = {
             const response = await api.request({
                 url: '/colors',
                 method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Deletes a user. (Admin only)
+     * @param {int} userID 
+     * @returns {Promise<object>} 
+     */
+    deleteUser: async function (userID) {
+        try {
+            const response = await api.request({
+                url: `/users/${userID}`,
+                method: "DELETE",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Create a user. (Admin only)
+     * @param {username: string, password: string, isAdmin: boolean} userData 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    createUser: async function (userData) {
+        try {
+            const response = await api.request({
+                url: '/users',
+                method: "POST",
+                data: userData
             });
             return response.data;
         } catch (err) {

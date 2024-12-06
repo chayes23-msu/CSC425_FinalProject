@@ -16,7 +16,7 @@ export function getQuery(queryFileName, params) {
         return getStatementFromSQLFile(queryFileName).get(params);
     } catch (error) {
         console.error(`Error running get-query "${queryFileName}":`, error);
-        throw new Error(`Failed to run get-query "${queryFileName}": ${error.message}`);
+        return Promise.reject(error);
     }
 }
 
@@ -31,7 +31,7 @@ export function runQuery(queryFileName, params) {
         return getStatementFromSQLFile(queryFileName).run(params);
     } catch (error) { 
         console.error(`Error running run-query "${queryFileName}":`, error);
-        throw new Error(`Failed to run run-query "${queryFileName}": ${error.message}`);
+        return Promise.reject(error);
     }
 }
 
@@ -46,7 +46,7 @@ export function allQuery(queryFileName, params) {
         return getStatementFromSQLFile(queryFileName).all(params);
     } catch (error) {
         console.error(`Error running all-query "${queryFileName}":`, error);
-        throw new Error(`Failed to run all-query "${queryFileName}": ${error.message}`);
+        return Promise.reject(error);
     }
 }
 
@@ -55,7 +55,7 @@ export function stringRunQuery(queryString, params) {
         return db.prepare(queryString).run(params);
     } catch (error) {
         console.error(`Error running string-run-query:`, error);
-        throw new Error(`Failed to run string-run-query: ${error.message}`);
+        return Promise.reject(error);
     }
 }
 
@@ -65,6 +65,6 @@ function getStatementFromSQLFile(fileName) {
         return db.prepare(readFileSync(filePath, 'utf8'));
     } catch (error) {
         console.error(`Error reading SQL file "${fileName}":`, error);
-        throw new Error(`Failed to load SQL file "${fileName}": ${error.message}`);
+        return Promise.reject(error);
     }
 }

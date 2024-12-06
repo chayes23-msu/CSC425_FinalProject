@@ -35,7 +35,7 @@ export default function UserManagement() {
             loadingHandlers.open();
             await api.updateUser(userToEdit.userID, { username: values.username, password: values.password, isAdmin: values.isAdmin });
             showSuccessNotification("User updated successfully");
-            setUsers(users.map((user) => user.userID === userToEdit.userID ? { ...user, username: values.username, isAdmin: values.isAdmin ? 1:0} : user));
+            setUsers(users.map((user) => user.userID === userToEdit.userID ? { ...user, username: values.username, isAdmin: values.isAdmin ? 1 : 0 } : user));
             return true;
         } catch (err) {
             showErrorNotification(err);
@@ -43,14 +43,29 @@ export default function UserManagement() {
         }
     }
 
-    const createAUser = () => {
-        loadingHandlers.open();
-        console.log("Create a user");
-        // *** NEED TO: create a user & update users state
+    const createAUser = async (userData) => {
+        try {
+            loadingHandlers.open();
+            await api.createUser(userData);
+            showSuccessNotification("User created successfully");
+            setUsers([...users, { ...userData, isAdmin: userData.isAdmin ? 1 : 0 }]);
+            return true;
+        } catch (err) {
+            showErrorNotification(err);
+            return false;
+        }
     }
 
-    const deleteUser = (userID) => {
-        
+    const deleteUser = async (userID) => {
+        try {
+            await api.deleteUser(userID);
+            showSuccessNotification("User deleted successfully");
+            setUsers(users.filter((user) => user.userID !== userID));
+            return true;
+        } catch (err) {
+            showErrorNotification(err);
+            return false;
+        }
     }
 
     const editUserForm = useForm({
@@ -75,23 +90,22 @@ export default function UserManagement() {
         },
         validateInputOnChange: true,
         validate: {
-            username: (value) => !value ? 'Username is required' : null,
+            username: (value) => !value ? 'Username is required' : !!users.find((user) => user.username === value) ? 'Username already exists' : null,
             password: (value) => !value ? 'Password is required' : null,
         }
     });
 
     return (
         <Flex maw="65%" mx="auto" direction="column" justify="center">
-            <Modal title="Edit user" opened={editUserModalOpened} onClose={() => {editUserModalHandlers.close();setUserToEdit(null)}}>
+            <Modal title="Edit user" opened={editUserModalOpened} onClose={() => { editUserModalHandlers.close(); setUserToEdit(null) }}>
                 <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                 <form
                     onSubmit={editUserForm.onSubmit(async (values) => {
-                        console.log(values);
                         if (await updateUser(values)) {
                             editUserModalHandlers.close();
-                            loadingHandlers.close();
                             setUserToEdit(null);
                         }
+                        loadingHandlers.close();
                     })}
                 >
                     <TextInput
@@ -124,15 +138,14 @@ export default function UserManagement() {
                     </Button>
                 </form>
             </Modal>
-            <Modal title="Create user" opened={createUserModalOpened} onClose={() => {createUserModalHandlers.close()}}>
+            <Modal title="Create user" opened={createUserModalOpened} onClose={() => { createUserModalHandlers.close() }}>
                 <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                 <form
                     onSubmit={createUserForm.onSubmit(async (values) => {
-                        console.log(values);
-                        if (true /*Create user*/) {
+                        if (await createAUser(values)) {
                             createUserModalHandlers.close();
-                            loadingHandlers.close();
                         }
+                        loadingHandlers.close();
                     })}
                 >
                     <TextInput
@@ -166,7 +179,7 @@ export default function UserManagement() {
                 </form>
             </Modal>
             <Title order={1} align='center'>Manage Users</Title>
-            <Button mt="lg" fz="lg" onClick={() => { createUserForm.reset();createUserModalHandlers.open();}}>Create a User</Button>
+            <Button mt="lg" fz="lg" onClick={() => { createUserForm.reset(); createUserModalHandlers.open(); }}>Create a User</Button>
             <Table highlightOnHover stickyHeader mt="lg" ta="center">
                 <Table.Thead>
                     <Table.Tr fz='h3'>
@@ -179,7 +192,7 @@ export default function UserManagement() {
                     {users.map((user) => (
                         <Table.Tr key={user.userID} fz="lg">
                             <Table.Td>{user.username}</Table.Td>
-                            <Table.Td>{user.isAdmin ? "Admin" : "Regular User"}</Table.Td>
+                            <Table.Td>{user.isAdmin == 1 ? "Admin" : "Regular User"}</Table.Td>
                             <Table.Td>
                                 <Button
                                     variant="subtle"
@@ -202,11 +215,10 @@ export default function UserManagement() {
                                                 Are you sure you want to delete user {user.username}? This is an irreversible action.
                                             </Text>
                                         ),
-                                        labels: {confirm: 'Delete', cancel: 'Cancel'},
-                                        confirmProps: {color: 'red'},
-                                        onConfirm: () => console.log(`Delete user ${user.username}`),
-                                    })
-                                    // *** NEED TO: delete user in onConfirm
+                                        labels: { confirm: 'Delete', cancel: 'Cancel' },
+                                        confirmProps: { color: 'red' },
+                                        onConfirm: () => deleteUser(user.userID),
+                                    });
                                 }}>
                                     <IconBackspace />
                                 </Button>

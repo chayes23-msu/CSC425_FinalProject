@@ -409,7 +409,7 @@ app.get("/users/:username", async (req, res) => {
 
 // Create a user
 app.post("/users", async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, isAdmin } = req.body;
 
     // Check if user is an admin (authenticateToken attaches username from the token to the request object)
     if (!req.user.isAdmin) {
@@ -417,8 +417,8 @@ app.post("/users", async (req, res) => {
     }
 
     // Input validation
-    if (!username || !password) {
-        return res.status(400).send("Username and password are required.");
+    if (!username || !password || isAdmin === undefined || isAdmin === null) {
+        return res.status(400).send("Username, password, and isAdmin are required.");
     }
 
     try {
@@ -426,6 +426,7 @@ app.post("/users", async (req, res) => {
         await runQuery("createUser", {
             username: username,
             password: hashedPassword,
+            isAdmin: isAdmin ? 1 : 0,
         });
         res.status(201).send("User created");
     } catch (error) {
@@ -480,7 +481,7 @@ app.put("/users/username/:userID", async (req, res) => {
             username: username,
         });
         res.status(204).send("Username updated");
-    } catch {
+    } catch (error) {
         console.error("Error updating username:", error);
         res.status(500).send("Error updating username");
     }
@@ -505,9 +506,27 @@ app.put("/users/:userID", async (req, res) => {
             isAdmin: isAdmin ? 1 : 0,
         });
         res.status(204).send("User updated");
-    } catch {
+    } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).send("Error updating user");
+    }
+});
+
+// Delete a user (for use by admin only users)
+app.delete("/users/:userID", async (req, res) => {
+    if(!req.user.isAdmin) 
+        return res.status(403).send("You do not have permission to delete a user.");
+
+    try {
+        await runQuery("deleteUser", { userID: req.params.userID });
+        res.status(204).send("User deleted");
+    } catch (error){
+        console.error("Error deleting user:", error);
+        if(error.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
+            res.status(400).send("User has associated data elsewhere and cannot be deleted.");
+        } else {
+            res.status(500).send("Error deleting user");
+        }
     }
 });
 //#endregion
