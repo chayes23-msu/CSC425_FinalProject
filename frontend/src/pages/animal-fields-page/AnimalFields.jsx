@@ -33,7 +33,7 @@ export default function AnimalFields() {
     }, []);
 
     return (
-        <Flex maw="65%" mx="auto" direction="column" justify="center">
+        <Flex maw="50%" mx="auto" direction="column" justify="center">
             <Title order={1} align='center'>Edit Available Cow Attributes</Title>
             <Title order={2} align='center' mt="xl">Breeds</Title>
             <Button fz="lg" mt="xs">Create Breed</Button>
