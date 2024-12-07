@@ -90,6 +90,22 @@ export const FinalProjectAPI = {
             return Promise.reject(err);
         }
     },
+    
+    /**
+     * Get all breeds from the database.
+     * @returns {Promise<object>} Resolves with an array of breeds if successful, rejects with an error otherwise.
+     */
+    getBreeds: async function () {
+        try {
+            const response = await api.request({
+                url: '/breeds',
+                method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
 
     /**
      * Deletes a user. (Admin only)

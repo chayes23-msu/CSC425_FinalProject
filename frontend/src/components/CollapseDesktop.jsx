@@ -28,7 +28,7 @@ export function CollapseDesktop({ children }) {
     }
     const navLinks = [
         new navLink("Account", "/account", <IconUser size="1rem" stroke={1.5} />),
-        new navLink("AnimalFields", "/animal-fields", <IconUser size="1rem" stroke={1.5} />),
+        new navLink("Animal Fields", "/animal-fields", <IconUser size="1rem" stroke={1.5} />),
     ];
 
     const handleNavLinkClick = (route) => {
