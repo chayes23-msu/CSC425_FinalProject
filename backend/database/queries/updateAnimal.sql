@@ -6,10 +6,10 @@ SET name = $name,
     fatherID = $fatherID,
     motherID = $motherID,
     colorID = $colorID,
-    currentWeight = $currentWeight
+    currentWeight = $currentWeight,
     tagNumber = $tagNumber,
     dateOfSale = $dateOfSale,
     pricePerPound = $pricePerPound,
-    totalPrice = $totalPrice,
+    totalPrice = $totalPrice
 WHERE animalID = $animalID;
 

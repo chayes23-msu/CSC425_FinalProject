@@ -185,18 +185,18 @@ app.post("/animals", async (req, res) => {
 
     // Input validation
     if (
-        !name ||
+        name === undefined ||
         !type ||
-        !birthDate ||
+        birthDate === undefined ||
         !breedComposition ||
-        !fatherID ||
-        !motherID ||
-        !colorID ||
-        !currentWeight ||
-        !tagNumber ||
-        !dateOfSale ||
-        !pricePerPound ||
-        !totalPrice
+        fatherID === undefined ||
+        motherID === undefined ||
+        colorID === undefined ||
+        currentWeight === undefined ||
+        tagNumber === undefined ||
+        dateOfSale === undefined ||
+        pricePerPound === undefined ||
+        totalPrice === undefined
     ) {
         return res.status(400).send("All fields are required.");
     }
@@ -253,18 +253,18 @@ app.put("/animals/:animalID", async (req, res) => {
 
     // Input validation
     if (
-        !name ||
+        name === undefined ||
         !type ||
-        !birthDate ||
+        birthDate === undefined ||
         !breedComposition ||
-        !fatherID ||
-        !motherID ||
-        !colorID ||
-        !currentWeight ||
-        !tagNumber ||
-        !dateOfSale ||
-        !pricePerPound ||
-        !totalPrice
+        fatherID === undefined ||
+        motherID === undefined ||
+        colorID === undefined ||
+        currentWeight === undefined ||
+        tagNumber === undefined ||
+        dateOfSale === undefined ||
+        pricePerPound === undefined ||
+        totalPrice === undefined
     ) {
         return res.status(400).send("All fields are required.");
     }
