@@ -443,12 +443,12 @@ app.put("/users/password/:userID", async (req, res) => {
         return res.status(400).send("Old and current passwords required.");
     }
 
-    const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
-    if (!passwordMatch) {
-        return res.status(401).send("Current password input is incorrect.");
-    }
-
     try {
+        const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
+        if (!passwordMatch) {
+            return res.status(401).send("Current password input is incorrect.");
+        }
+
         const hashedPassword = await hashPassword(password);
         await runQuery("updateUserPassword", {
             userID: req.params.userID,
@@ -470,12 +470,12 @@ app.put("/users/username/:userID", async (req, res) => {
 
     if(!req.user.isAdmin) 
         return res.status(403).send("You do not have permission to update a username.");
-    
-    const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
-    if (!passwordMatch) 
-        return res.status(401).send("Current password input is incorrect.");
 
     try {
+        const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
+        if (!passwordMatch) 
+            return res.status(401).send("Current password input is incorrect.");
+
         await runQuery("updateUsername", {
             userID: req.params.userID,
             username: username,
