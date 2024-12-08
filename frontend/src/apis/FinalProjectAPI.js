@@ -90,6 +90,130 @@ export const FinalProjectAPI = {
             return Promise.reject(err);
         }
     },
+    
+    /**
+     * Add a color to the database.
+     * @param {color: string} colorData 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    createColor: async function (colorData) {
+        try {
+            const response = await api.request({
+                url: '/colors',
+                method: "POST",
+                data: colorData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Delete a color from the database.
+     * @param {int} colorID 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise. 
+     */
+    deleteColor: async function (colorID) {
+        try {
+            const response = await api.request({
+                url: `/colors/${colorID}`,
+                method: "DELETE",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Update a color in the database.
+     * @param {int} colorID 
+     * @param {color: string} colorData 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    updateColor: async function (colorID, colorData) {
+        try {
+            const response = await api.request({
+                url: `/colors/${colorID}`,
+                method: "PUT",
+                data: colorData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Get all breeds from the database.
+     * @returns {Promise<object>} Resolves with an array of breeds if successful, rejects with an error otherwise.
+     */
+    getBreeds: async function () {
+        try {
+            const response = await api.request({
+                url: '/breeds',
+                method: "GET",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+ 
+    /**
+     * Add a new breed to the database.
+     * @param {breed: string} breedData 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    createBreed: async function (breedData) {
+        try {
+            const response = await api.request({
+                url: '/breeds',
+                method: "POST",
+                data: breedData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Delete a breed from the database
+     * @param {int} breedID 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    deleteBreed: async function (breedID) {
+        try {
+            const response = await api.request({
+                url: `/breeds/${breedID}`,
+                method: "DELETE",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Update a breed in the database.
+     * @param {int} breedID 
+     * @param {breed: string} breedData 
+     * @returns 
+     */
+    updateBreed: async function (breedID, breedData) {
+        try {
+            const response = await api.request({
+                url: `/breeds/${breedID}`,
+                method: "PUT",
+                data: breedData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
 
     /**
      * Deletes a user. (Admin only)

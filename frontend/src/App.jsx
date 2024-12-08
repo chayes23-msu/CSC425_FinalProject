@@ -14,6 +14,7 @@ import '@mantine/notifications/styles.css';
 import Logout from './pages/logout/Logout.jsx';
 import UserManagement from './pages/user-management/UserManagement.jsx';
 import { ModalsProvider } from '@mantine/modals';
+import AnimalFields from './pages/animal-fields-page/AnimalFields.jsx';
 
 export default function App() {
     const auth = useAuth();
@@ -41,6 +42,7 @@ export default function App() {
                             <Route path="/account" element={<Account />} />
                             <Route path="/logout" element={<Logout />} />
                             <Route path="/user-management" element={auth.user?.isAdmin ? <UserManagement /> : <Navigate to="/ex" />} />
+                            <Route path="/animal-fields" element={<AnimalFields />} />
                         </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
