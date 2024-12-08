@@ -308,7 +308,7 @@ app.delete("/animals/:animalID", async (req, res) => {
 //get an animal by id
 app.get("/animals/:animalID", async (req, res) => {
     try {
-        const animal = await allQuery(
+        const animal = await getQuery(
             "getAnimalByID",
             {animalID: req.params.animalID}
         );

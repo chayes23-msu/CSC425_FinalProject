@@ -9,9 +9,11 @@ import {
   Alert,
   Button,
   Drawer,
-  CloseButton
+  CloseButton,
+  Select
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
+import { useForm } from '@mantine/form';
 import '@mantine/dates/styles.css';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from "react";
@@ -68,6 +70,8 @@ function sortData(data, { sortBy, reversed, search }) {
 function TableSort() {
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
+  const [breeds, setBreeds] = useState([]);
+  const [colors, setColors] = useState([]);
   const [sortBy, setSortBy] = useState(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [fetchError, setFetchError] = useState("");
@@ -100,8 +104,20 @@ function TableSort() {
     }
   };
 
+  const fetchColors = async () => {
+    try {
+      const response = await FinalProjectAPI.getColors();
+      console.log("Fetched colors:", response);
+      setColors(response);
+    } catch (err) {
+      console.error("Error fetching colors:", err);
+    }
+  };
+
   useEffect(() => {
     fetchAnimals();
+    fetchBreeds();
+    fetchColors();
   }, []);
 
   useEffect(() => {
@@ -137,6 +153,35 @@ function TableSort() {
         console.error("Error deleting animal:", errorMessage);
         setFetchError(errorMessage);
       }
+    }
+  };
+
+  const fetchBreeds = async () => {
+    try {
+      const response = await FinalProjectAPI.getBreeds();
+      console.log("Fetched breeds:", response);
+      setBreeds(response);
+    } catch (err) {
+      console.error("Error fetching breeds:", err);
+    }
+  };
+
+  const handleBreedChange = (event) => {
+    const { value } = event.currentTarget;
+    setNewAnimal({ ...newAnimal, breedComposition: value });
+  };
+  
+  const handleNewBreedChange = (event) => {
+    const { value } = event.currentTarget;
+    setNewAnimal({ ...newAnimal, breedComposition: value });
+  };
+  
+  const handleAddNewBreed = async () => {
+    try {
+      await FinalProjectAPI.createBreed({ name: newAnimal.breedComposition });
+      fetchBreeds(); // Refresh the breed list
+    } catch (err) {
+      console.error("Error creating breed:", err);
     }
   };
 
@@ -239,14 +284,16 @@ function TableSort() {
           mb="sm"
           dropdownType='modal'
           valueFormat='YYYY-MM-DD'
-        />
-        <TextInput
-          label="Breed Composition"
-          name="breedComposition"
-          value={newAnimal.breedComposition}
-          onChange={handleInputChange}
-          mb="sm"
-        />
+              />
+          <Select
+            label="Breed Composition"
+            name="breedComposition"
+            value={newAnimal.breedComposition}
+            onChange={(value) => setNewAnimal({ ...newAnimal, breedComposition: value })}
+            data={breeds.map((breed) => ({ value: breed.breed, label: breed.breed }))}
+            mb="sm"
+            searchable
+          />
         <TextInput
           label="Father ID"
           name="fatherID"
@@ -268,12 +315,14 @@ function TableSort() {
           onChange={handleInputChange}
           mb="sm"
         />
-        <TextInput
-          label="Color ID"
-          name="colorID"
+        <Select
+          label="Color"
+          name="color"
           value={newAnimal.colorID}
-          onChange={handleInputChange}
+          onChange={(value) => setNewAnimal({ ...newAnimal, colorID: value })}
+          data={colors.map((color) => ({ value: String(color.colorID), label: color.color }))}
           mb="sm"
+          searchable
         />
         <TextInput
           label="Current Weight"

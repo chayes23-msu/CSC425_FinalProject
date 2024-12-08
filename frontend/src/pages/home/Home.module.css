@@ -46,4 +46,22 @@
     z-index: 10; /* Ensure it stays above other elements if needed */
   }
   
+  .breedDropdown {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #495057;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
   
+  .breedDropdown:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }

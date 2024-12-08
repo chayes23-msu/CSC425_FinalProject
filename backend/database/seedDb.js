@@ -21,8 +21,8 @@ let breeds = ["Angus", "YN", "BN", "Holstein"]
 let animals = [
     {
         colorID: Math.floor(Math.random() * colors.length),
-        motherID: 1,
-        fatherID: 2,
+        motherID: null,
+        fatherID: null,
         birthDate: "2021-01-01",
         name: "Fluffy",
         type: "cow",
@@ -30,9 +30,9 @@ let animals = [
         currentWeight: 1123,
         breedComposition: "Holstein",
         tagNumber: "123",
-        dateOfSale: null,
-        pricePerPound: null,
-        totalPrice: null,
+        dateOfSale: "2021-01-01",
+        pricePerPound: 1.50,
+        totalPrice: 1684.5,
     },
     {
         colorID: Math.floor(Math.random() * colors.length),
@@ -42,12 +42,12 @@ let animals = [
         name: "Bruce",
         type: "bull",
         tagNumber: "123457",
-        currentWeight: 2340,
+        currentWeight: 2340.0,
         breedComposition: "Holstein",
         tagNumber: 456,
-        dateOfSale: null,
-        pricePerPound: null,
-        totalPrice: null,
+        dateOfSale: "2021-01-01",
+        pricePerPound: 1.50,
+        totalPrice: 3510.0,
     },
     {
         colorID: Math.floor(Math.random() * (colors.length)),
@@ -60,9 +60,9 @@ let animals = [
         currentWeight: 950,
         breedComposition: "Holstein",
         tagNumber: 789,
-        dateOfSale: null,
-        pricePerPound: null,
-        totalPrice: null,
+        dateOfSale: "2025-01-01",
+        pricePerPound: 1.50,
+        totalPrice: 1425.0,
     },
 ];
 let notebookEntries = [
@@ -75,19 +75,19 @@ let notebookEntries = [
     {
         animalID: 2,
         content: "This is another test entry",
-        userID: 2,
+        userID: 1,
         weight: 2345
     },
     {
         animalID: 3,
         content: "This is yet another test entry",
-        userID: 3,
+        userID: 1,
         weight: 3456
     },
     {
         animalID: 1,
         content: "This is another test entry",
-        userID: 2,
+        userID: 1,
         weight: 4567
     }
 ]
@@ -129,10 +129,10 @@ async function addNotebookEntries() {
 }
 
 // comment out what you don't want to add to the database
-await addAdminAccount();
-await addColors();
-await addBreeds();
-await addAnimals();
-// await addUsers();
+//await addAdminAccount();
+//await addColors();
+//await addBreeds();
+//await addAnimals();
+//await addUsers();
 await addNotebookEntries();
 

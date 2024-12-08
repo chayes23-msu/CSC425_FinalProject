@@ -20,9 +20,9 @@ INSERT INTO Animals
         $birthDate,
         $name,
         $type,
+        $tagNumber,
         $currentWeight,
         $breedComposition,
-        $tagNumber,
         $dateOfSale,
         $pricePerPound,
         $totalPrice

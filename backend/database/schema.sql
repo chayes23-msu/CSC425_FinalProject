@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Animals (
     name TEXT,
     type TEXT NOT NULL,
     currentWeight INTEGER,
-    tagNumber INTEGER NOT NULL,
+    tagNumber TEXT NOT NULL,
     breedComposition TEXT NOT NULL,
     dateOfSale DATETIME,
     pricePerPound NUMERIC,

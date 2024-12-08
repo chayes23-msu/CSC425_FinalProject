@@ -30,10 +30,10 @@ export default function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={
-                        auth.loggedIn() ? <Navigate to="/ex" replace /> : <Navigate to="/login" replace />}
+                        auth.loggedIn() ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />}
                     />
                     <Route path="/login" element={
-                        auth.loggedIn() ? <Navigate to="/ex" replace /> : <Login />}
+                        auth.loggedIn() ? <Navigate to="/home" replace /> : <Login />}
                     />
                     <Route element={<PrivateRoute />}>
                         <Route element={<CollapseDesktop />}>

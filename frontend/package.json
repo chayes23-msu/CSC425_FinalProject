@@ -10,13 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/carousel": "^7.14.3",
     "@mantine/core": "^7.14.1",
     "@mantine/dates": "^7.14.1",
-    "@mantine/form": "^7.14.1",
+    "@mantine/form": "^7.14.3",
     "@mantine/hooks": "^7.14.1",
+    "@mantine/modals": "^7.14.3",
     "@mantine/notifications": "^7.14.1",
     "@mantinex/mantine-logo": "^1.0.1",
     "axios": "^1.7.7",
+    "embla-carousel-react": "^7.1.0",
     "frontend": "file:",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
