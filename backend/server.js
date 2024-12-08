@@ -471,7 +471,7 @@ app.put("/users/username/:userID", async (req, res) => {
     if(!req.user.isAdmin) 
         return res.status(403).send("You do not have permission to update a username.");
     
-    const passwordMatch = await verifyPassword(currentPassword, user.password);
+    const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
     if (!passwordMatch) 
         return res.status(401).send("Current password input is incorrect.");
 
