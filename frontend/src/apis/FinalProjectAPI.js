@@ -109,11 +109,35 @@ export const FinalProjectAPI = {
         }
     },
 
+    /**
+     * Delete a color from the database.
+     * @param {int} colorID 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise. 
+     */
     deleteColor: async function (colorID) {
         try {
             const response = await api.request({
                 url: `/colors/${colorID}`,
                 method: "DELETE",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Update a color in the database.
+     * @param {int} colorID 
+     * @param {color: string} colorData 
+     * @returns {Promise<object>} Resolves if successful, rejects with an error otherwise.
+     */
+    updateColor: async function (colorID, colorData) {
+        try {
+            const response = await api.request({
+                url: `/colors/${colorID}`,
+                method: "PUT",
+                data: colorData,
             });
             return response.data;
         } catch (err) {
@@ -165,6 +189,25 @@ export const FinalProjectAPI = {
             const response = await api.request({
                 url: `/breeds/${breedID}`,
                 method: "DELETE",
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
+    /**
+     * Update a breed in the database.
+     * @param {int} breedID 
+     * @param {breed: string} breedData 
+     * @returns 
+     */
+    updateBreed: async function (breedID, breedData) {
+        try {
+            const response = await api.request({
+                url: `/breeds/${breedID}`,
+                method: "PUT",
+                data: breedData,
             });
             return response.data;
         } catch (err) {

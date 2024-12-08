@@ -13,6 +13,9 @@ export default function AnimalFields() {
     const [colors, setColors] = useState([]);
     const [createBreedModalOpened, setCreateBreedModalOpened] = useDisclosure(false);
     const [breedToEdit, setBreedToEdit] = useState(null);
+    const [colorToEdit, setColorToEdit] = useState(null);
+    const [editColorModalOpened, setEditColorModalOpened] = useDisclosure(false);
+    const [editBreedModalOpened, setEditBreedModalOpened] = useDisclosure(false);
     const [createColorModalOpened, setCreateColorModalOpened] = useDisclosure(false);
     const [loading, setLoading] = useDisclosure(false);
 
@@ -62,6 +65,19 @@ export default function AnimalFields() {
         }
     }
 
+    const updateBreed = async (values) => {
+        try {
+            setLoading.open();
+            await api.updateBreed(breedToEdit.breedID, values);
+            showSuccessNotification('Breed updated successfully');
+            setBreeds(breeds.map(breed => breed.breedID === breedToEdit.breedID ? values : breed));
+            return true;
+        } catch (error) {
+            showErrorNotification(error);
+            return false;
+        }
+    }
+
     const createBreedForm = useForm({
         initialValues: {
             breed: ''
@@ -90,6 +106,19 @@ export default function AnimalFields() {
             await api.deleteColor(colorID);
             showSuccessNotification('Color deleted successfully');
             setColors(colors.filter(color => color.colorID !== colorID));
+            return true;
+        } catch (error) {
+            showErrorNotification(error);
+            return false;
+        }
+    }
+
+    const updateColor = async (values) => {
+        try {
+            setLoading.open();
+            await api.updateColor(colorToEdit.colorID, values);
+            showSuccessNotification('Color updated successfully');
+            setColors(colors.map(color => color.colorID === colorToEdit.colorID ? values : color));
             return true;
         } catch (error) {
             showErrorNotification(error);
@@ -169,7 +198,59 @@ export default function AnimalFields() {
                     </Button>
                 </form>
             </Modal>
-            <Title order={1} align='center'>Edit Available Cow Attributes</Title>
+            <Modal title="Edit Breed" opened={editBreedModalOpened} onClose={() => {setEditBreedModalOpened.close(); setBreedToEdit(null);}}>
+                <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                <form
+                    onSubmit={createBreedForm.onSubmit(async (values) => {
+                        if (await updateBreed(values)) {
+                            setEditBreedModalOpened.close();
+                        }
+                        setLoading.close();
+                    })}
+                >
+                    <TextInput
+                        label="Breed"
+                        placeholder="Breed"
+                        key={createBreedForm.key('breed')}
+                        {...createBreedForm.getInputProps('breed')}
+                    />
+                    <Button
+                        fullWidth
+                        type="submit"
+                        mt="xl"
+                        disabled={!createBreedForm.isValid() || !createBreedForm.isDirty()}
+                    >
+                        Submit
+                    </Button>
+                </form>
+            </Modal>
+            <Modal title="Edit Color" opened={editColorModalOpened} onClose={() => {setEditColorModalOpened.close(); setColorToEdit(null);}}>
+                <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                <form
+                    onSubmit={createColorForm.onSubmit(async (values) => {
+                        if (await updateColor(values)) {
+                            setEditColorModalOpened.close();
+                        }
+                        setLoading.close();
+                    })}
+                >
+                    <TextInput
+                        label="Color"
+                        placeholder="Color"
+                        key={createColorForm.key('color')}
+                        {...createColorForm.getInputProps('color')}
+                    />
+                    <Button
+                        fullWidth
+                        type="submit"
+                        mt="xl"
+                        disabled={!createColorForm.isValid() || !createColorForm.isDirty()}
+                    >
+                        Submit
+                    </Button>
+                </form>
+            </Modal>
+            <Title order={1} align='center'>Edit Available Attributes</Title>
             <Title order={2} align='center' mt="xl">Breeds</Title>
             <Button 
                 fz="lg" 
@@ -192,7 +273,9 @@ export default function AnimalFields() {
                                     variant="subtle"
                                     onClick={() => {
                                         setBreedToEdit(breed);
-                                        
+                                        createBreedForm.setInitialValues({breed: breed.breed});
+                                        createBreedForm.reset();
+                                        setEditBreedModalOpened.open();
                                     }}
                                 >
                                     <IconEdit />
@@ -238,7 +321,12 @@ export default function AnimalFields() {
                             <Table.Td>
                             <Button
                                     variant="subtle"
-                                    
+                                    onClick={() => {
+                                        setColorToEdit(color);
+                                        createColorForm.setInitialValues({color: color.color});
+                                        createColorForm.reset();
+                                        setEditColorModalOpened.open();
+                                    }}
                                 >
                                     <IconEdit />
                                 </Button>
