@@ -38,7 +38,6 @@ export default function App() {
                     />
                     <Route element={<PrivateRoute />}>
                         <Route element={<CollapseDesktop />}>
-                            <Route path="/ex" element={<h1>You&apos;ve logged in!!!</h1>} />
                             <Route path="/account" element={<Account />} />
                             <Route path="/logout" element={<Logout />} />
                             <Route path="/home" element={

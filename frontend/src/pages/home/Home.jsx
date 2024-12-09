@@ -223,19 +223,9 @@ function TableSort() {
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.animalID} className={classes.tableRow}>
       <Table.Td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-        <button 
-          onClick={() => navigate(`/animal/${row.animalID}`)} 
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            cursor: 'pointer',
-            outline: 'none',
-          }}
-          aria-label={`View details for animal ID: ${row.animalID}`}
-        >
+        <Button variant='subtle' c='white' onClick={() => navigate(`/animal/${row.animalID}`)} >
           <IconCow style={{ width: '24px', height: '24px', display: 'block' }} />
-        </button>
+        </Button>
       </Table.Td>
       <Table.Td>{row.tagNumber}</Table.Td>
       <Table.Td>{row.name}</Table.Td>
@@ -361,17 +351,17 @@ function TableSort() {
         <Button onClick={handleSave}>Save</Button>
       </Drawer>
       <TextInput
-        placeholder="Search by any field"
+        placeholder="Search by name"
         mb="md"
         leftSection={<IconSearch size={16} stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
         className={classes.searchBar} // Apply custom styles
       />
-        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
+        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed" highlightOnHover>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th></Table.Th> {/* Empty header cell for the cow icon */}
+            <Table.Th ta='center'>View Details</Table.Th> {/* Empty header cell for the cow icon */}
             <Th
               sorted={sortBy === 'tagNumber'}
               reversed={reverseSortDirection}
