@@ -77,7 +77,7 @@ export default function UserManagement() {
         },
         validateInputOnChange: true,
         validate: {
-            username: (value) => !value ? 'Username is required' : null,
+            username: (value) => !value ? 'Username is required' : users.some((user) => user.username === value && user.userID !== userToEdit?.userID) ? 'Username already exists' : null,
         }
     });
 

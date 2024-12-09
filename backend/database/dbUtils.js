@@ -39,7 +39,7 @@ export function runQuery(queryFileName, params) {
  * 
  * @param {*} queryFileName This is the file name (WITHOUT THE EXTENSION) of the sql you want to run 
  * @param {*} params This is an array of the parameters you want to pass to the query
- * @returns Object representing each row returned by the query
+ * @returns Array of objects representing each row returned by the query
  */
 export function allQuery(queryFileName, params) {
     try {
@@ -50,6 +50,12 @@ export function allQuery(queryFileName, params) {
     }
 }
 
+/**
+ * This method SHOULD NOT be used for any endpoints. It is here for special cases for the seeder.
+ * @param {*} queryString This is the query string you want to run
+ * @param {*} params This is an array of the parameters you want to pass to the query
+ * @returns An object summarizing changes made by the query
+ */
 export function stringRunQuery(queryString, params) {
     try {
         return db.prepare(queryString).run(params);
@@ -59,9 +65,14 @@ export function stringRunQuery(queryString, params) {
     }
 }
 
+/**
+ * 
+ * @param {string} fileName The name of the file (WITHOUT THE EXTENSION) you want to get the statement from (only files in model folder)
+ * @returns A prepared statement for the query
+ */
 function getStatementFromSQLFile(fileName) {
     try {
-        const filePath = join("backend", "database", "model", `${fileName}.sql`);
+        const filePath = join("backend", "database", "queries", `${fileName}.sql`);
         return db.prepare(readFileSync(filePath, 'utf8'));
     } catch (error) {
         console.error(`Error reading SQL file "${fileName}":`, error);

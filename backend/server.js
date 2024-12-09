@@ -26,7 +26,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use((req, res, next) => {
-    if (["/login"].includes(req.path)) {
+    if (["/login", "/"].includes(req.path)) {
         return next(); // Skip auth for these routes
     }
     authenticateToken(req, res, next);
@@ -185,18 +185,18 @@ app.post("/animals", async (req, res) => {
 
     // Input validation
     if (
-        !name ||
+        name === undefined ||
         !type ||
-        !birthDate ||
+        birthDate === undefined ||
         !breedComposition ||
-        !fatherID ||
-        !motherID ||
-        !colorID ||
-        !currentWeight ||
-        !tagNumber ||
-        !dateOfSale ||
-        !pricePerPound ||
-        !totalPrice
+        fatherID === undefined ||
+        motherID === undefined ||
+        colorID === undefined ||
+        currentWeight === undefined ||
+        tagNumber === undefined ||
+        dateOfSale === undefined ||
+        pricePerPound === undefined ||
+        totalPrice === undefined
     ) {
         return res.status(400).send("All fields are required.");
     }
@@ -447,12 +447,12 @@ app.put("/users/password/:userID", async (req, res) => {
         return res.status(400).send("Old and current passwords required.");
     }
 
-    const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
-    if (!passwordMatch) {
-        return res.status(401).send("Current password input is incorrect.");
-    }
-
     try {
+        const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
+        if (!passwordMatch) {
+            return res.status(401).send("Current password input is incorrect.");
+        }
+
         const hashedPassword = await hashPassword(password);
         await runQuery("updateUserPassword", {
             userID: req.params.userID,
@@ -474,12 +474,12 @@ app.put("/users/username/:userID", async (req, res) => {
 
     if(!req.user.isAdmin) 
         return res.status(403).send("You do not have permission to update a username.");
-    
-    const passwordMatch = await verifyPassword(currentPassword, user.password);
-    if (!passwordMatch) 
-        return res.status(401).send("Current password input is incorrect.");
 
     try {
+        const passwordMatch = await verifyPassword(currentPassword, await getQuery("getUserByID", { userID: req.params.userID }).password);
+        if (!passwordMatch) 
+            return res.status(401).send("Current password input is incorrect.");
+
         await runQuery("updateUsername", {
             userID: req.params.userID,
             username: username,
