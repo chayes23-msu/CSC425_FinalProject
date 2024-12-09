@@ -1,117 +1,58 @@
+/**
+ * AnimalDetailsPage component fetches and displays detailed information about a specific animal,
+ * including its notebook entries. It allows users to create and edit notebook entries and update
+ * animal details.
+ *
+ * @component
+ * @example
+ * return (
+ *   <AnimalDetailsPage />
+ * )
+ *
+ * @returns {JSX.Element} The AnimalDetailsPage component.
+ *
+ * @description
+ * This component uses the `useParams` hook to get the animal ID from the URL and fetches the animal
+ * details and notebook entries from the API. It displays the animal details and a carousel of notebook
+ * entries. Users can add new notebook entries, edit existing ones, and update animal details through
+ * modals.
+ *
+ * @function
+ * @name AnimalDetailsPage
+ *
+ * @requires react
+ * @requires react-router-dom
+ * @requires ../../apis/FinalProjectAPI
+ * @requires @mantine/carousel
+ * @requires ../../assets/icon-components/IconCow
+ * @requires @mantine/core
+ * @requires @mantine/carousel/styles.css
+ * @requires ./animal-details.module.css
+ * @requires ../../authentication/AuthProvider
+ */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FinalProjectAPI } from '../../apis/FinalProjectAPI';
 import { Carousel } from '@mantine/carousel';
 import IconCow from '../../assets/icon-components/IconCow';
-import { Text, Title, Container, Card, Group, Button, Modal, TextInput, Paper, ThemeIcon } from '@mantine/core';
+import { Text, Title, Container, Card, Group, Button, Modal, TextInput, Paper, ThemeIcon, CloseButton } from '@mantine/core';
 import '@mantine/carousel/styles.css';
 import classes from './animal-details.module.css';
 import { useAuth } from '../../authentication/AuthProvider';
+import IconX from '../../assets/icon-components/IconX';
+
 
 const AnimalDetailsPage = () => {
   const { id } = useParams();
-  const { currentUser } = useAuth();
+  const auth = useAuth();
   const [animal, setAnimal] = useState(null);
   const [notebookEntries, setNotebookEntries] = useState([]);
   const [fetchError, setFetchError] = useState(null);
-  const [modalOpened, setModalOpened] = useState(false);
+  const [createModalOpened, setCreateModalOpened] = useState(false);
+  const [editModalOpened, setEditModalOpened] = useState(false);
   const [currentEntry, setCurrentEntry] = useState(null);
   const [entryContent, setEntryContent] = useState('');
   const [entryWeight, setEntryWeight] = useState('');
-
-
-  useEffect(() => {
-    const fetchAnimalDetails = async () => {
-      try {
-        const data = await FinalProjectAPI.getAnimalByID(id);
-        console.log("Fetched animal details:", data);
-        setAnimal(data);
-      } catch (err) {
-        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
-        console.error("Error fetching animal details:", errorMessage);
-        setFetchError(errorMessage);
-      }
-    };
-
-    const fetchNotebookEntries = async () => {
-      try {
-        const data = await FinalProjectAPI.getNotebookEntries(id);
-        console.log("Fetched notebook entries:", data);
-        setNotebookEntries(data);
-      } catch (err) {
-        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
-        console.error("Error fetching notebook entries:", errorMessage);
-        setFetchError(errorMessage);
-      }
-    };
-
-    fetchAnimalDetails();
-    fetchNotebookEntries();
-  }, [id]);
-
-
-
-
-  const handleEditClick = (entry) => {
-    setCurrentEntry(entry);
-    setEntryContent(entry.content);
-    setEntryWeight(entry.weight || '');
-    setModalOpened(true);
-  };
-  
-  const handleSave = async () => {
-    try {
-      const updatedEntry = {
-        content: entryContent,
-        weight: entryWeight,
-        modifiedAt: new Date().toISOString(), // Autofill modifiedAt
-        userID: currentUser.userID, // Assuming you have the current user's ID
-      };
-      await FinalProjectAPI.updateNotebookEntry(currentEntry.entryID, updatedEntry);
-      setNotebookEntries((entries) =>
-        entries.map((entry) =>
-          entry.entryID === currentEntry.entryID ? { ...entry, ...updatedEntry } : entry
-        )
-      );
-      setModalOpened(false);
-    } catch (err) {
-      console.error("Error updating notebook entry:", err);
-    }
-  };
-  const handleCreateClick = () => {
-    setCurrentEntry(null);
-    setEntryContent('');
-    setEntryWeight('');
-    setModalOpened(true);
-  };
-  
-  const handleCreate = async () => {
-    try {
-      const newEntry = {
-        animalID: id, // Assuming the animal ID is available
-        content: entryContent,
-        weight: entryWeight,
-        createdAt: new Date().toISOString(), // Autofill createdAt
-        modifiedAt: new Date().toISOString(), // Autofill modifiedAt
-        userID: currentUser.userID, // Assuming you have the current user's ID
-      };
-      if (currentEntry) {
-        await FinalProjectAPI.updateNotebookEntry(currentEntry.entryID, newEntry);
-        setNotebookEntries((entries) =>
-          entries.map((entry) =>
-            entry.entryID === currentEntry.entryID ? { ...entry, ...newEntry } : entry
-          )
-        );
-      } else {
-        const createdEntry = await FinalProjectAPI.createNotebookEntry(newEntry);
-        setNotebookEntries((entries) => [...entries, createdEntry]);
-      }
-      setModalOpened(false);
-    } catch (err) {
-      console.error("Error saving notebook entry:", err);
-    }
-  };
-
   const [animalModalOpened, setAnimalModalOpened] = useState(false);
   const [animalDetails, setAnimalDetails] = useState({
     name: '',
@@ -144,6 +85,102 @@ const AnimalDetailsPage = () => {
       });
     }
   }, [animal]);
+
+
+  useEffect(() => {
+    const fetchAnimalDetails = async () => {
+      try {
+        const data = await FinalProjectAPI.getAnimalByID(id);
+        console.log("Fetched animal details:", data);
+        setAnimal(data);
+      } catch (err) {
+        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+        console.error("Error fetching animal details:", errorMessage);
+        setFetchError(errorMessage);
+      }
+    };
+
+    const fetchNotebookEntries = async () => {
+      try {
+        const data = await FinalProjectAPI.getNotebookEntries(id);
+        console.log("Fetched notebook entries:", data);
+        setNotebookEntries(data);
+      } catch (err) {
+        const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+        console.error("Error fetching notebook entries:", errorMessage);
+        setFetchError(errorMessage);
+      }
+    };
+
+    fetchAnimalDetails();
+    fetchNotebookEntries();
+  }, [id]);
+
+
+  const handleDelete = async (notebookEntryID) => {
+    try {
+      await FinalProjectAPI.deleteNotebookEntry(notebookEntryID);
+      // Refetch notebook entries to ensure data is up-to-date
+      const updatedEntries = await FinalProjectAPI.getNotebookEntries(id);
+      setNotebookEntries(updatedEntries);
+    } catch (err) {
+      console.error("Error deleting notebook entry:", err);
+    }
+  };
+
+  const handleEditClick = (entry) => {
+    setCurrentEntry(entry);
+    setEntryContent(entry.content);
+    setEntryWeight(entry.weight || '');
+    setEditModalOpened(true);
+  };
+  
+  const handleSave = async () => {
+    try {
+      const updatedEntry = {
+        content: entryContent,
+        weight: entryWeight,
+        modifiedAt: new Date().toISOString(), // Autofill modifiedAt
+        userID: auth.user.userID, // Use the current user's ID
+      };
+      await FinalProjectAPI.updateNotebookEntry(currentEntry.entryID, updatedEntry);
+      setNotebookEntries((entries) =>
+        entries.map((entry) =>
+          entry.entryID === currentEntry.entryID ? { ...entry, ...updatedEntry } : entry
+        )
+      );
+      setEditModalOpened(false);
+    } catch (err) {
+      console.error("Error updating notebook entry:", err);
+    }
+  };
+  const handleCreateClick = () => {
+    setEntryContent('');
+    setEntryWeight('');
+    setCreateModalOpened(true);
+  };
+  
+  const handleCreate = async () => {
+    try {
+      const newEntry = {
+        animalID: id, // Assuming the animal ID is available
+        content: entryContent,
+        weight: entryWeight,
+        createdAt: new Date().toISOString(), // Autofill createdAt
+        modifiedAt: new Date().toISOString(), // Autofill modifiedAt
+        userID: auth.user.userID, // Use the current user's ID
+      };
+      await FinalProjectAPI.createNotebookEntry(newEntry);
+      // Refetch notebook entries to ensure data is up-to-date
+      const updatedEntries = await FinalProjectAPI.getNotebookEntries(id);
+      setNotebookEntries(updatedEntries);
+      setCreateModalOpened(false);
+    } catch (err) {
+      console.error("Error saving notebook entry:", err);
+    }
+  };
+
+
 
   const handleAnimalSave = async () => {
     try {
@@ -205,25 +242,25 @@ const AnimalDetailsPage = () => {
     </ThemeIcon>
     </Group>
     <Button mt="sm" onClick={() => handleCreateClick()}>Add Notebook Entry</Button>
-      <Modal
-        opened={modalOpened}
-        onClose={() => setModalOpened(false)}
-        title="Add Notebook Entry"
-      >
-        <TextInput
-          label="Content"
-          value={entryContent}
-          onChange={(event) => setEntryContent(event.currentTarget.value)}
-          mb="sm"
-        />
-        <TextInput
-          label="Weight"
-          value={entryWeight}
-          onChange={(event) => setEntryWeight(event.currentTarget.value)}
-          mb="sm"
-        />
-        <Button onClick={handleCreate}>Save</Button>
-      </Modal>
+    <Modal
+      opened={createModalOpened}
+      onClose={() => setCreateModalOpened(false)}
+      title="Add Notebook Entry"
+    >
+      <TextInput
+        label="Content"
+        value={entryContent}
+        onChange={(event) => setEntryContent(event.currentTarget.value)}
+        mb="sm"
+      />
+      <TextInput
+        label="Weight"
+        value={entryWeight}
+        onChange={(event) => setEntryWeight(event.currentTarget.value)}
+        mb="sm"
+      />
+      <Button onClick={handleCreate}>Create</Button>
+    </Modal>
     <Text className={classes.cowText}>Type: {animal.type}</Text>
     <Text className={classes.cowText}>Birth Date: {animal.birthDate}</Text>
     <Text className={classes.cowText}>Breed Composition: {animal.breedComposition}</Text>
@@ -257,6 +294,10 @@ const AnimalDetailsPage = () => {
               >
                 <IconCow size={28} stroke={1.5} />
               </ThemeIcon>
+              <CloseButton
+                className={classes.deleteButton}
+                onClick={() => handleDelete(entry.entryID)}
+              />
               <Text size="xl" fw={500} mt="md" className={classes.cowTitle}>
                 Entry from {entry.createdAt}
               </Text>
@@ -279,8 +320,8 @@ const AnimalDetailsPage = () => {
 
     {/* Modal for editing notebook entries */}
     <Modal
-        opened={modalOpened}
-        onClose={() => setModalOpened(false)}
+        opened={editModalOpened}
+        onClose={() => setEditModalOpened(false)}
         title="Edit Notebook Entry"
       >
         <TextInput
