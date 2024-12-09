@@ -1,0 +1,40 @@
+
+  
+  .cow-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white; /* Ensure it stands out */
+    border-radius: 50%;
+  }
+  
+  .cow-title {
+    color: var(--mantine-color-dark-0); /* Adjust for dark theme */
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+  }
+  
+  .cow-text {
+    color: var(--mantine-color-dark-0);
+  }
+  
+  .card {
+    transition: transform 150ms ease, box-shadow 100ms ease;
+    padding: var(--mantine-spacing-xl);
+    cursor: pointer;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+    box-shadow: var(--mantine-shadow-md);
+  }
+  
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 6px;
+    background-image: linear-gradient(0, black, white);
+  }
+  
