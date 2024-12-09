@@ -45,7 +45,6 @@ app.get("/colors", async (req, res) => {
     try {
         const colors = await allQuery("getColors", {});
         res.json(colors);
-        res.status(200).send("Colors retrieved");
     } catch (error) {
         console.error("Error getting colors:", error);
         res.status(500).send("Error getting colors");

@@ -1,5 +1,5 @@
-const request = require('supertest');
-const app = require('./testing.server'); // Adjust the path as needed
+import app from '../server.js';
+import request from 'supertest';
 
 describe('API Endpoints', () => {
     it('should respond with status 200 for GET /colors', async () => {
