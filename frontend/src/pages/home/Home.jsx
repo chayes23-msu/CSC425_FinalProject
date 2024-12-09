@@ -26,6 +26,7 @@ import IconSearch from '../../assets/icon-components/IconSearch';
 import IconSelector from '../../assets/icon-components/IconSelector';
 import IconAlertCircle from '../../assets/icon-components/IconAlertCircle';
 import IconCow from '../../assets/icon-components/IconCow';
+import { showErrorNotification, showSuccessNotification } from '../../notifications/notificationFunctions.jsx';
 
 function Th({ children, reversed, sorted, onSort }) {
   const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
@@ -107,7 +108,6 @@ function TableSort() {
   const fetchColors = async () => {
     try {
       const response = await FinalProjectAPI.getColors();
-      console.log("Fetched colors:", response);
       setColors(response);
     } catch (err) {
       console.error("Error fetching colors:", err);
@@ -148,7 +148,9 @@ function TableSort() {
         await FinalProjectAPI.deleteAnimal(animalID);
         // Refetch the animals to update the table
         fetchAnimals();
+        showSuccessNotification("Animal deleted successfully");
       } catch (err) {
+        showErrorNotification(err);
         const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
         console.error("Error deleting animal:", errorMessage);
         setFetchError(errorMessage);
@@ -205,12 +207,13 @@ function TableSort() {
         birthDate: newAnimal.birthDate ? newAnimal.birthDate.toISOString().split('T')[0] : '', // Format the birthDate to YYYY-MM-DD
         dateOfSale: newAnimal.dateOfSale ? newAnimal.dateOfSale.toISOString().split('T')[0] : '', // Format the dateOfSale to YYYY-MM-DD
       };
-      console.log("Creating animal with data:", formattedAnimal); // Log the data being sent
       await FinalProjectAPI.createAnimal(formattedAnimal);
       close();
       // Refetch the animals to update the table
       fetchAnimals();
+      showSuccessNotification("Animal created successfully");
     } catch (err) {
+      showErrorNotification(err);
       const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
       console.error("Error creating animal:", errorMessage);
       setFetchError(errorMessage);

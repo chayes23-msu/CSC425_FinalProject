@@ -39,7 +39,7 @@ import { Text, Title, Container, Card, Group, Button, Modal, TextInput, Paper, T
 import '@mantine/carousel/styles.css';
 import classes from './animal-details.module.css';
 import { useAuth } from '../../authentication/AuthProvider';
-import IconX from '../../assets/icon-components/IconX';
+import { showErrorNotification, showSuccessNotification } from '../../notifications/notificationFunctions.jsx';
 
 
 const AnimalDetailsPage = () => {
@@ -91,10 +91,10 @@ const AnimalDetailsPage = () => {
     const fetchAnimalDetails = async () => {
       try {
         const data = await FinalProjectAPI.getAnimalByID(id);
-        console.log("Fetched animal details:", data);
         setAnimal(data);
       } catch (err) {
         const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
+        showErrorNotification(errorMessage);
         console.error("Error fetching animal details:", errorMessage);
         setFetchError(errorMessage);
       }
@@ -103,11 +103,11 @@ const AnimalDetailsPage = () => {
     const fetchNotebookEntries = async () => {
       try {
         const data = await FinalProjectAPI.getNotebookEntries(id);
-        console.log("Fetched notebook entries:", data);
         setNotebookEntries(data);
       } catch (err) {
         const errorMessage = err.response?.data || err.message || "An unexpected error occurred.";
         console.error("Error fetching notebook entries:", errorMessage);
+        showErrorNotification(errorMessage);
         setFetchError(errorMessage);
       }
     };
@@ -123,7 +123,9 @@ const AnimalDetailsPage = () => {
       // Refetch notebook entries to ensure data is up-to-date
       const updatedEntries = await FinalProjectAPI.getNotebookEntries(id);
       setNotebookEntries(updatedEntries);
+      showSuccessNotification("Notebook entry deleted successfully");
     } catch (err) {
+      showErrorNotification(err);
       console.error("Error deleting notebook entry:", err);
     }
   };
@@ -150,7 +152,9 @@ const AnimalDetailsPage = () => {
         )
       );
       setEditModalOpened(false);
+      showSuccessNotification("Notebook entry updated successfully");
     } catch (err) {
+      showErrorNotification(err);
       console.error("Error updating notebook entry:", err);
     }
   };
@@ -175,7 +179,9 @@ const AnimalDetailsPage = () => {
       const updatedEntries = await FinalProjectAPI.getNotebookEntries(id);
       setNotebookEntries(updatedEntries);
       setCreateModalOpened(false);
+      showSuccessNotification("Notebook entry created successfully");
     } catch (err) {
+      showErrorNotification(err);
       console.error("Error saving notebook entry:", err);
     }
   };
@@ -203,8 +209,6 @@ const AnimalDetailsPage = () => {
         totalPrice: parseFloat(animalDetails.totalPrice) || 0, // Ensure it's a number
       };
   
-      // Log details for debugging
-      console.log("Updated Animal Details:", updatedAnimalDetails);
   
       // Call API
       await FinalProjectAPI.updateAnimal(animal.animalID, updatedAnimalDetails);
@@ -212,7 +216,9 @@ const AnimalDetailsPage = () => {
       // Update local state
       setAnimal(updatedAnimalDetails);
       setAnimalModalOpened(false);
+      showSuccessNotification("Animal details updated successfully");
     } catch (err) {
+      showErrorNotification(err);
       console.error("Error updating animal details:", err.message || err);
       // Optional: display a user-friendly error
     }
