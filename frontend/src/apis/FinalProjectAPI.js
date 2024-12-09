@@ -165,6 +165,19 @@ export const FinalProjectAPI = {
         }
     },
 
+    updateAnimal: async function (animalID, animalData) {
+        try {
+            const response = await api.request({
+                url: `/animals/${animalID}`,
+                method: "PUT",
+                data: animalData,
+            });
+            return response.data;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    },
+
     /**
      * Deletes an animal.
      * @param {number} animalID - The ID of the animal to delete.

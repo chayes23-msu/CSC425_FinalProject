@@ -64,6 +64,49 @@ const AnimalDetailsPage = () => {
     }
   };
 
+  const [animalModalOpened, setAnimalModalOpened] = useState(false);
+  const [animalDetails, setAnimalDetails] = useState({
+    name: '',
+    type: '',
+    birthDate: '',
+    breedComposition: '',
+    fatherID: '',
+    motherID: '',
+    colorID: '',
+    currentWeight: '',
+    dateOfSale: '',
+    pricePerPound: '',
+    totalPrice: ''
+  });
+
+  useEffect(() => {
+    if (animal) {
+      setAnimalDetails({
+        name: animal.name,
+        type: animal.type,
+        birthDate: animal.birthDate,
+        breedComposition: animal.breedComposition,
+        fatherID: animal.fatherID,
+        motherID: animal.motherID,
+        colorID: animal.colorID,
+        currentWeight: animal.currentWeight,
+        dateOfSale: animal.dateOfSale,
+        pricePerPound: animal.pricePerPound,
+        totalPrice: animal.totalPrice
+      });
+    }
+  }, [animal]);
+
+  const handleAnimalSave = async () => {
+    try {
+      await FinalProjectAPI.updateAnimal(animal.id, animalDetails);
+      setAnimal(animalDetails);
+      setAnimalModalOpened(false);
+    } catch (err) {
+      console.error("Error updating animal details:", err);
+    }
+  };
+
   if (fetchError) {
     return <div>Error: {fetchError}</div>;
   }
@@ -97,10 +140,8 @@ const AnimalDetailsPage = () => {
     <Text className={classes.cowText}>Date of Sale: {animal.dateOfSale}</Text>
     <Text className={classes.cowText}>Price Per Pound: {animal.pricePerPound}</Text>
     <Text className={classes.cowText}>Total Price: {animal.totalPrice}</Text>
+    <Button mt="md" onClick={() => setAnimalModalOpened(true)}>Edit Animal</Button>
   </Card>
-    <Title order={2} mt="lg" className={classes.cowTitle}>
-      Notebook Entries
-    </Title>
     {notebookEntries.length > 0 ? (
       <Carousel
         slideSize="90%"
@@ -123,7 +164,7 @@ const AnimalDetailsPage = () => {
                 <IconCow size={28} stroke={1.5} />
               </ThemeIcon>
               <Text size="xl" fw={500} mt="md" className={classes.cowTitle}>
-                {entry.createdAt}
+                Entry from {entry.createdAt}
               </Text>
               <Text size="sm" mt="sm" c="dimmed" className={classes.cowText}>
                 Modified at: {entry.modifiedAt}
@@ -156,6 +197,80 @@ const AnimalDetailsPage = () => {
       />
       <Button onClick={handleSave}>Save</Button>
     </Modal>
+
+    <Modal
+  opened={animalModalOpened}
+  onClose={() => setAnimalModalOpened(false)}
+  title="Edit Animal Details"
+>
+  <TextInput
+    label="Name"
+    value={animalDetails.name}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, name: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Type"
+    value={animalDetails.type}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, type: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Birth Date"
+    value={animalDetails.birthDate}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, birthDate: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Breed Composition"
+    value={animalDetails.breedComposition}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, breedComposition: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Father ID"
+    value={animalDetails.fatherID}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, fatherID: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Mother ID"
+    value={animalDetails.motherID}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, motherID: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Color ID"
+    value={animalDetails.colorID}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, colorID: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Current Weight"
+    value={animalDetails.currentWeight}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, currentWeight: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Date of Sale"
+    value={animalDetails.dateOfSale}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, dateOfSale: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Price Per Pound"
+    value={animalDetails.pricePerPound}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, pricePerPound: event.currentTarget.value })}
+    mb="sm"
+  />
+  <TextInput
+    label="Total Price"
+    value={animalDetails.totalPrice}
+    onChange={(event) => setAnimalDetails({ ...animalDetails, totalPrice: event.currentTarget.value })}
+    mb="sm"
+  />
+  <Button onClick={handleAnimalSave}>Save</Button>
+  </Modal>
   </Container>
 
 
