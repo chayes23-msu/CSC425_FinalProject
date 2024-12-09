@@ -252,39 +252,26 @@ app.put("/animals/:animalID", async (req, res) => {
     } = req.body;
 
     // Input validation
-    if (
-        !name ||
-        !type ||
-        !birthDate ||
-        !breedComposition ||
-        !fatherID ||
-        !motherID ||
-        !tagNumber ||
-        !colorID ||
-        !currentWeight ||
-        !tagNumber ||
-        !dateOfSale ||
-        !pricePerPound ||
-        !totalPrice
-    ) {
-        return res.status(400).send("All fields are required.");
-    }
+    // Input validation
+if (!birthDate || !type || !tagNumber || !breedComposition) {
+    return res.status(400).send("Required fields: birthDate, type, tagNumber, breedComposition.");
+}
+
 
     try {
         await runQuery("updateAnimal", {
-            name: name,
-            type: type,
-            birthDate: birthDate,
-            breedComposition: breedComposition,
-            fatherID: fatherID,
-            motherID: motherID,
-            colorID: colorID,
-            tagNumber: tagNumber,
-            currentWeight: currentWeight,
-            tagNumber: tagNumber,
-            dateOfSale: dateOfSale,
-            pricePerPound: pricePerPound,
-            totalPrice: totalPrice,
+            name: name || null,
+            type: type || null,
+            birthDate: birthDate || null,
+            breedComposition: breedComposition || null,
+            fatherID: fatherID || null,
+            motherID: motherID || null,
+            colorID: colorID || null,
+            tagNumber: tagNumber || null,
+            currentWeight: currentWeight || null,
+            dateOfSale: dateOfSale || null,
+            pricePerPound: pricePerPound || null,
+            totalPrice: totalPrice || null,
             animalID: req.params.animalID,
         });
         res.status(204).send("Animal updated");
