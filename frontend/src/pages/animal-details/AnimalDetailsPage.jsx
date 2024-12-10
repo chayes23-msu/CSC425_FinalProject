@@ -308,8 +308,11 @@ const AnimalDetailsPage = () => {
               <Text size="xl" fw={500} mt="md" className={classes.cowTitle}>
                 Entry from {entry.createdAt}
               </Text>
-              <Text size="sm" mt="sm" c="dimmed" className={classes.cowText}>
+              <Text size="sm" mt="xs" c="dimmed" className={classes.cowText}>
                 Modified at: {entry.modifiedAt}
+              </Text>
+              <Text size="sm" mt="" c="dimmed" className={classes.cowText}>
+                Weight on entry: {entry.weight}
               </Text>
               <Text size="md" mt="sm" className={classes.cowText}>
                 {entry.content}
