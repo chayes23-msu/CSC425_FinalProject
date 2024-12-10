@@ -53,7 +53,7 @@ export default function Login() {
 
         <Container size={420} my={40}>
             <Title ta="center" className={classes.title}>
-                Welcome to Cow App!
+                Welcome to MooManager!
             </Title>
             {/* <Text c="dimmed" size="sm" ta="center" mt={5}>
                 Do not have an account yet?{' '}
