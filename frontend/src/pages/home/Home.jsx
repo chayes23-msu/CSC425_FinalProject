@@ -27,6 +27,7 @@ import IconSelector from '../../assets/icon-components/IconSelector';
 import IconAlertCircle from '../../assets/icon-components/IconAlertCircle';
 import IconCow from '../../assets/icon-components/IconCow';
 import { showErrorNotification, showSuccessNotification } from '../../notifications/notificationFunctions.jsx';
+import { modals } from '@mantine/modals';
 
 function Th({ children, reversed, sorted, onSort }) {
   const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
@@ -143,7 +144,6 @@ function TableSort() {
   
 
   const handleDelete = async (animalID) => {
-    if (window.confirm("Are you sure you want to delete this animal?")) {
       try {
         await FinalProjectAPI.deleteAnimal(animalID);
         // Refetch the animals to update the table
@@ -155,7 +155,6 @@ function TableSort() {
         console.error("Error deleting animal:", errorMessage);
         setFetchError(errorMessage);
       }
-    }
   };
 
   const fetchBreeds = async () => {
@@ -232,7 +231,17 @@ function TableSort() {
       <Table.Td>{row.currentWeight}</Table.Td>
       <Table.Td>{row.dateOfSale}</Table.Td>
       <Table.Td>
-        <CloseButton className={classes.closeButton} onClick={() => handleDelete(row.animalID)} />
+        <CloseButton className={classes.closeButton} onClick={() => modals.openConfirmModal({
+          title: 'Delete animal',
+          centered: true,
+          children: (
+              <Text>
+                  Are you sure you want to delete this animal? This is an irreversible action.
+              </Text>
+          ),
+          labels: { confirm: 'Delete', cancel: 'Cancel' },
+          confirmProps: { color: 'red' },
+          onConfirm: () => handleDelete(row.animalID)})} />
       </Table.Td>
     </Table.Tr>
   ));
