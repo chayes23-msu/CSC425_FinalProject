@@ -1,6 +1,4 @@
 import axios from "axios";
-import { showErrorNotification } from "../notifications/notificationFunctions";
-
 
 let token = localStorage.getItem("token");
 
@@ -348,7 +346,6 @@ export const FinalProjectAPI = {
         }
     },
 
-
     /**
      * Gets all users from the database
      * @returns {Promise<object>} Resolves with an array of users {username: string, isAdmin: int(0 or 1), userID: int} if successful, rejects with an error otherwise.
@@ -410,83 +407,15 @@ export const FinalProjectAPI = {
     updateUsername: async function (userID, newUsernameData) {
         try {
             const response = await api.request({
-                url: `/animals/${animalID}`,
+                url: `/users/username/${userID}`,
                 method: "DELETE",
+                data: newUsernameData
             });
             return response.data;
         } catch (err) {
             return Promise.reject(err);
         }
     },
-
-    // NOT IMPLEMENTED IN BACKEND YET
-    // getUserByID: async function (userID) {
-    //     try {
-    //         const response = await api.request({
-    //             url: `/users/${userID}`,
-    //             method: "GET",
-    //         });
-    //         return response.data;
-    //     } catch (err) {
-    //         return Promise.reject(err);
-    //     }
-    // },
-
-    // Colors API calls go here
-    /**
-     * Fetches all colors.
-     * @returns {Promise<object[]>} Resolves with an array of colors if successful, rejects with an error otherwise.
-     */
-    getColors: async function () {
-        try {
-            const response = await api.request({
-                url: '/colors',
-                method: "GET",
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
-
-    createColor: async function (colorData) {
-        try {
-            const response = await api.request({
-                url: '/colors',
-                method: "POST",
-                data: colorData,
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
-
-    deleteColor: async function (colorID) {
-        try {
-            const response = await api.request({
-                url: `/colors/${colorID}`,
-                method: "DELETE",
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
-
-    updateColor: async function (colorID, colorData) {
-        try {
-            const response = await api.request({
-                url: `/colors/${colorID}`,
-                method: "PUT",
-                data: colorData,
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
-    
 
     // Notebooks API calls go here
     getNotebookEntries : async function(animalID) {
@@ -537,56 +466,5 @@ export const FinalProjectAPI = {
         } catch (err) {
             return Promise.reject(err);
         }
-    },
-
-    // Breeds API calls go here
-    getBreeds : async function() {
-        try {
-            const response = await api.request({
-                url: '/breeds',
-                method: "GET",
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
-
-    createBreed : async function(breedData) {
-        try {
-            const response = await api.request({
-                url: '/breeds',
-                method: "POST",
-                data: breedData,
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
-
-    deleteBreed : async function(breedID) {
-        try {
-            const response = await api.request({
-                url: `/breeds/${breedID}`,
-                method: "DELETE",
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
-
-    updateBreed : async function(breedID, breedData) {
-        try {
-            const response = await api.request({
-                url: `/breeds/${breedID}`,
-                method: "PUT",
-                data: breedData,
-            });
-            return response.data;
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    },
+    }
 };
