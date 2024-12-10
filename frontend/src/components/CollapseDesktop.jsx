@@ -9,6 +9,7 @@ import { useAuth } from '../authentication/AuthProvider';
 import IconUsers from '../assets/icon-components/IconUsers';
 import IconPallete from '../assets/icon-components/IconPallete';
 import IconCow from '../assets/icon-components/IconCow';
+import Logo from './Logo';
 
 // This component is a wrapper for the protected routes that adds a nav bar with a header
 // The code was found at https://mantine.dev/core/app-shell/ 
@@ -54,7 +55,7 @@ export function CollapseDesktop({ children }) {
                 <Group h="100%" px="md">
                     <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
                     <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
-                    <MantineLogo size={30} />
+                    <Logo />
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">
