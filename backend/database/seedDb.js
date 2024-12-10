@@ -26,7 +26,7 @@ let animals = [
         birthDate: "2021-01-01",
         name: "Fluffy",
         type: "cow",
-        tagNumber: "123466",
+        tagNumber: "123",
         currentWeight: 1123,
         breedComposition: "Holstein",
         tagNumber: "123",
@@ -41,10 +41,10 @@ let animals = [
         birthDate: "2020-02-24",
         name: "Bruce",
         type: "bull",
-        tagNumber: "123457",
+        tagNumber: "457",
         currentWeight: 2340.0,
         breedComposition: "Holstein",
-        tagNumber: 456,
+        tagNumber: "456",
         dateOfSale: "2021-01-01",
         pricePerPound: 1.50,
         totalPrice: 3510.0,
@@ -59,7 +59,7 @@ let animals = [
         tagNumber: "123456",
         currentWeight: 950,
         breedComposition: "Holstein",
-        tagNumber: 789,
+        tagNumber: "789",
         dateOfSale: "2025-01-01",
         pricePerPound: 1.50,
         totalPrice: 1425.0,
@@ -134,5 +134,5 @@ async function addNotebookEntries() {
 //await addBreeds();
 //await addAnimals();
 //await addUsers();
-await addNotebookEntries();
+// await addNotebookEntries();
 
