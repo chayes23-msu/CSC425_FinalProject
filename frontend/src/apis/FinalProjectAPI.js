@@ -408,7 +408,7 @@ export const FinalProjectAPI = {
         try {
             const response = await api.request({
                 url: `/users/username/${userID}`,
-                method: "DELETE",
+                method: "PUT",
                 data: newUsernameData
             });
             return response.data;
