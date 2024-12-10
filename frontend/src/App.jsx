@@ -3,7 +3,6 @@ import '@mantine/core/styles.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './authentication/AuthProvider.jsx';
 import { CollapseDesktop } from './components/CollapseDesktop.jsx';
-import './index.css';
 import Home from './pages/home/Home.jsx';
 import Login from './pages/login/Login.jsx';
 import { NotFound } from './pages/not-found/NotFound.jsx';
@@ -15,13 +14,33 @@ import Logout from './pages/logout/Logout.jsx';
 import UserManagement from './pages/user-management/UserManagement.jsx';
 import { ModalsProvider } from '@mantine/modals';
 import AnimalFields from './pages/animal-fields-page/AnimalFields.jsx';
+import './styles.css'
 
 export default function App() {
     const auth = useAuth();
 
     // Theme object for mantine components. Change this to change the look of the page.
     const theme = createTheme({
-
+        primaryColor: "cream",
+        primaryShade: { dark: 6, light: 4},
+        autoContrast: true,
+        luminanceThreshold: 0.3, 
+        colors: {
+            cream: 
+            
+            [
+                "#fff7e5",
+                "#faecd3",
+                "#f2d8a8",
+                "#ebc37a",
+                "#e4b153",
+                "#e0a53a",
+                "#df9f2b",
+                "#c58b1d",
+                "#b07b16",
+                "#996907"
+            ],
+        }
     });
 
     return (

@@ -1,0 +1,4 @@
+/* For light mode */
+:root[data-mantine-color-scheme="light"] {
+  --mantine-color-body: #fdfaee !important;
+}

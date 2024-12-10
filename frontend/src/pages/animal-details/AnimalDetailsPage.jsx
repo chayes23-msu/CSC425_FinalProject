@@ -241,7 +241,7 @@ const AnimalDetailsPage = () => {
       size="xl"
       radius="md"
       variant="gradient"
-      gradient={{ deg: 0, from: 'white', to: 'black' }}
+      gradient={{ deg: 0, from: 'cream.8', to: 'cream.3' }}
       className={classes.cowIcon}
     >
       <IconCow size={28} stroke={1.5} />
@@ -281,6 +281,7 @@ const AnimalDetailsPage = () => {
   </Card>
     {notebookEntries.length > 0 ? (
       <Carousel
+      mt='sm'
         slideSize="90%"
         slideGap="md"
         align="start"
@@ -295,7 +296,7 @@ const AnimalDetailsPage = () => {
                 size="xl"
                 radius="md"
                 variant="gradient"
-                gradient={{ deg: 0, from: 'white', to: 'black' }}
+                gradient={{ deg: 0, from: 'cream.8', to: 'cream.3' }}
                 className={classes.cowIcon}
               >
                 <IconCow size={28} stroke={1.5} />

@@ -222,7 +222,7 @@ function TableSort() {
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.animalID} className={classes.tableRow}>
       <Table.Td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-        <Button variant='subtle' c='white' onClick={() => navigate(`/animal/${row.animalID}`)} >
+        <Button variant='subtle' onClick={() => navigate(`/animal/${row.animalID}`)} >
           <IconCow style={{ width: '24px', height: '24px', display: 'block' }} />
         </Button>
       </Table.Td>
